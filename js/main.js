@@ -101,23 +101,13 @@ let renderCard = function () {
   // записываем клонированный шаблон в переменную
   const popupCard = userCardTemplate.cloneNode(true);
 
-  // создаем переменные для элементов карточки popupCard
-  const popupTitle = popupCard.querySelector('.popup__title');
-  const popupAddress = popupCard.querySelector('.popup__text--address');
-  const popupPrice = popupCard.querySelector('.popup__text--price');
-  const popupType = popupCard.querySelector('.popup__type');
-  const popupTextCapacity = popupCard.querySelector('.popup__text--capacity');
-  const popupTextTime = popupCard.querySelector('.popup__text--time');
+  // в элементы карточки popupCard записываем данные из сгенерированного массива
+  popupCard.querySelector('.popup__title').textContent = firstAd.offer.title;
+  popupCard.querySelector('.popup__text--address').textContent = firstAd.offer.address;
+  popupCard.querySelector('.popup__text--price').textContent = `${firstAd.offer.price} ₽/ночь`;
+  popupCard.querySelector('.popup__type').textContent = typesHotel[firstAd.offer.type];
   const popupFeatures = popupCard.querySelector('.popup__features');
-  const popupDescriptions = popupCard.querySelector('.popup__description');
   const popupPhotos = popupCard.querySelector('.popup__photos');
-  const popupAvatar = popupCard.querySelector('.popup__avatar');
-
-  // в каждый элемент карточки записываем данные из сгенерированного массива
-  popupTitle.textContent = firstAd.offer.title;
-  popupAddress.textContent = firstAd.offer.address;
-  popupPrice.textContent = `${firstAd.offer.price} ₽/ночь`;
-  popupType.textContent = typesHotel[firstAd.offer.type];
 
   // функция выбора окончаний
   const plural = function (n, forms) {
@@ -134,8 +124,8 @@ let renderCard = function () {
   const room = plural(firstAd.offer.rooms, ['комната', 'комнаты', 'комнат']);
   const guest = plural(firstAd.offer.guests, ['гостя', 'гостей', 'гостей']);
 
-  popupTextCapacity.textContent = `${firstAd.offer.rooms} ${room} для ${firstAd.offer.guests} ${guest}`;
-  popupTextTime.textContent = `Заезд после ${firstAd.offer.checkin}, выезд до ${firstAd.offer.checkout}`;
+  popupCard.querySelector('.popup__text--capacity').textContent = `${firstAd.offer.rooms} ${room} для ${firstAd.offer.guests} ${guest}`;
+  popupCard.querySelector('.popup__text--time').textContent = `Заезд после ${firstAd.offer.checkin}, выезд до ${firstAd.offer.checkout}`;
 
   // вывод доступных удобств
   while (popupFeatures.firstChild) {
@@ -144,11 +134,12 @@ let renderCard = function () {
 
   for (let i = 0; i < features.length; i++) {
     let item = document.createElement('li');
-    item.setAttribute('class', `popup__feature popup__feature--${features[i]}`);
+    item.classList.add(`popup__feature`);
+    item.classList.add(`popup__feature--${features[i]}`);
     popupFeatures.appendChild(item);
   }
 
-  popupDescriptions.textContent = firstAd.offer.description;
+  popupCard.querySelector('.popup__description').textContent = firstAd.offer.description;
 
   // добавление фотографий в блок popupPhotos
   const img = popupPhotos.querySelector('.popup__photo');
@@ -157,10 +148,10 @@ let renderCard = function () {
   let insertedImg;
   for (let num = 0; num < addressImages.length; num++) {
     insertedImg = img.cloneNode(true);
-    insertedImg.setAttribute('src', addressImages[num]);
+    insertedImg.src = addressImages[num];
     popupPhotos.appendChild(insertedImg);
   }
-  popupAvatar.setAttribute('src', firstAd.author.avatar);
+  popupCard.querySelector('.popup__avatar').src = firstAd.author.avatar;
 
   return popupCard;
 };
