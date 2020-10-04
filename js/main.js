@@ -1,6 +1,12 @@
 'use strict';
+// Личный проект: больше деталей (часть 1)
 
-const typesHotel = ['palace', 'flat', 'house', 'bungalow'];
+const typesHotel = {
+  palace: 'Дворец',
+  flat: 'Квартира',
+  bungalo: 'Бунгало',
+  house: 'Дом'
+};
 const timeCheckIn = ['12:00', '13:00', '14:00'];
 const timeCheckOut = ['12:00', '13:00', '14:00'];
 const features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
@@ -39,7 +45,7 @@ function getHotel(index) {
       'title': 'заголовок объявления',
       'address': `${coordinateX}, ${coordinateY}`,
       'price': 10,
-      'type': returnsRandomData(typesHotel),
+      'type': returnsRandomData(Object.keys(typesHotel)),
       'rooms': 10,
       'guests': 10,
       'checkin': returnsRandomData(timeCheckIn),
@@ -69,6 +75,8 @@ map.classList.remove('map--faded');
 const hotelTemplate = document.querySelector('#pin').content
 .querySelector('.map__pin');
 
+const mapPins = document.querySelector('.map__pins');
+
 hotels.forEach(function (item, i) {
   const hotelElement = hotelTemplate.cloneNode(true);
   const avatarImage = hotelElement.querySelector('img');
@@ -79,5 +87,80 @@ hotels.forEach(function (item, i) {
 
   const fragment = document.createDocumentFragment();
   fragment.appendChild(hotelElement);
-  map.appendChild(fragment);
+  mapPins.appendChild(fragment);
 });
+
+// Личный проект: больше деталей (часть 2)
+
+let renderCard = function () {
+  let userCardTemplate = document.querySelector('#card').content.querySelector('.map__card');
+
+  // записываем массив с данными для первого предложения в переменную
+  const firstAd = hotels[0];
+
+  // записываем клонированный шаблон в переменную
+  const popupCard = userCardTemplate.cloneNode(true);
+
+  // в элементы карточки popupCard записываем данные из сгенерированного массива
+  popupCard.querySelector('.popup__title').textContent = firstAd.offer.title;
+  popupCard.querySelector('.popup__text--address').textContent = firstAd.offer.address;
+  popupCard.querySelector('.popup__text--price').textContent = `${firstAd.offer.price} ₽/ночь`;
+  popupCard.querySelector('.popup__type').textContent = typesHotel[firstAd.offer.type];
+  const popupFeatures = popupCard.querySelector('.popup__features');
+  const popupPhotos = popupCard.querySelector('.popup__photos');
+
+  // функция выбора окончаний
+  const plural = function (n, forms) {
+    let id;
+    if (n % 10 === 1 && n % 100 !== 11) {
+      id = 0;
+    } else if (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) {
+      id = 1;
+    } else {
+      id = 2;
+    }
+    return forms[id] || '';
+  };
+  const room = plural(firstAd.offer.rooms, ['комната', 'комнаты', 'комнат']);
+  const guest = plural(firstAd.offer.guests, ['гостя', 'гостей', 'гостей']);
+
+  popupCard.querySelector('.popup__text--capacity').textContent = `${firstAd.offer.rooms} ${room} для ${firstAd.offer.guests} ${guest}`;
+  popupCard.querySelector('.popup__text--time').textContent = `Заезд после ${firstAd.offer.checkin}, выезд до ${firstAd.offer.checkout}`;
+
+  // вывод доступных удобств
+  while (popupFeatures.firstChild) {
+    popupFeatures.removeChild(popupFeatures.firstChild);
+  }
+
+  for (let i = 0; i < features.length; i++) {
+    let item = document.createElement('li');
+    item.classList.add(`popup__feature`);
+    item.classList.add(`popup__feature--${features[i]}`);
+    popupFeatures.appendChild(item);
+  }
+
+  popupCard.querySelector('.popup__description').textContent = firstAd.offer.description;
+
+  // добавление фотографий в блок popupPhotos
+  const img = popupPhotos.querySelector('.popup__photo');
+  popupPhotos.removeChild(img);
+
+  let insertedImg;
+  for (let num = 0; num < addressImages.length; num++) {
+    insertedImg = img.cloneNode(true);
+    insertedImg.src = addressImages[num];
+    popupPhotos.appendChild(insertedImg);
+  }
+  popupCard.querySelector('.popup__avatar').src = firstAd.author.avatar;
+
+  return popupCard;
+};
+
+// функция вставки карточки в DOM
+const insertCard = function () {
+  const mapfiltersContainer = map.querySelector('.map__filters-container');
+  map.insertBefore(renderCard(), mapfiltersContainer);
+};
+
+// вставляем карточку
+insertCard();
