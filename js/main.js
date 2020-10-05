@@ -76,11 +76,15 @@ const hotelTemplate = document.querySelector('#pin').content
 
 const mapPins = document.querySelector('.map__pins');
 
+const withPin = 50;
+// const hightPin = 70;
+
 hotels.forEach(function (item, i) {
   const hotelElement = hotelTemplate.cloneNode(true);
   const avatarImage = hotelElement.querySelector('img');
-  hotelElement.style.left = hotels[i].location.x + 'px';
-  hotelElement.style.top = hotels[i].location.y + 'px';
+  hotelElement.style.left = `${hotels[i].location.x + (withPin / 2)}px`;
+  hotelElement.style.top = `${hotels[i].location.y}px`;
+  hotelElement.setAttribute('hidden', 'true');
   avatarImage.src = hotels[i].author.avatar;
   avatarImage.alt = hotels[i].offer.title;
 
@@ -160,42 +164,57 @@ const insertCard = function () {
   const mapfiltersContainer = map.querySelector('.map__filters-container');
   map.insertBefore(renderCard(), mapfiltersContainer);
 };
-
-// вставляем карточку
 insertCard();
-
 // Личный проект: доверяй, но проверяй (часть 1)
 
 const adForm = document.querySelector('.ad-form');
 const disabledFormElements = document.querySelectorAll('.ad-form fieldset, .map__filters select, .map__filters fieldset');
+const mapCards = document.querySelectorAll('.map__card');
+const pins = document.querySelectorAll('.map__pin');
+const mainPin = document.querySelector('.map__pin--main');
+const resetButton = document.querySelector('.ad-form__reset');
+
+const addAttribute = function (elements, attribute) {
+  for (let i = 0; i < elements.length; i++) {
+    elements[i].setAttribute(attribute, '');
+  }
+};
+
+const removeAttribute = function (elements, attribute) {
+  for (let i = 0; i < elements.length; i++) {
+    elements[i].removeAttribute(attribute, '');
+  }
+};
 
 const disableElements = function () {
-  for (let i = 0; i < disabledFormElements.length; i++) {
-    disabledFormElements[i].setAttribute('disabled', '');
-  }
+  addAttribute(disabledFormElements, 'disabled');
+  addAttribute(mapCards, 'hidden');
 };
 
-const runlements = function () {
-  for (var i = 0; i < disabledFormElements.length; i++) {
-    disabledFormElements[i].removeAttribute('disabled', '');
-  }
+const showElements = function () {
+  removeAttribute(disabledFormElements, 'disabled');
+  removeAttribute(mapCards, 'hidden');
+  removeAttribute(pins, 'hidden');
 };
+
+function resetForms() {
+  const forms = document.querySelectorAll('form');
+  for (let i = 0; i < forms.length; i++) {
+    forms[i].reset();
+  }
+}
 
 disableElements(); // по дефолту запущена, переопределяется при активации
 
 // функция активации страницы
 const activation = function () {
   makeHotelArray();
-
+  showElements();
   adForm.classList.remove('ad-form--disabled');
   map.classList.remove('map--faded');
 
-  runlements();
-
   address.value = `${mainPinX}, ${mainPinY}`;
 };
-
-const mainPin = document.querySelector('.map__pin--main');
 
 let notActivatedYet = true;
 mainPin.addEventListener('mousedown', function (evt) {
@@ -216,13 +235,22 @@ mainPin.addEventListener('keydown', function (evt) {
   }
 });
 
+resetButton.addEventListener('click', function () {
+  resetForms();
+  disableElements();
+  addAttribute(pins, 'hidden');
+  adForm.classList.add('ad-form--disabled');
+  map.classList.add('map--faded');
+  document.querySelector('.map__pin--main').removeAttribute('hidden', 'true');
+});
+
 // Заполнение поля адреса
 const address = document.querySelector('#address');
 
 const mainPinWidth = 65;
-const mainPinHeight = 65;
+const mainPinHeight = 80;
 const mainPinX = parseInt((mainPin.style.left), 10) + Math.round(mainPinWidth / 2);
-const mainPinY = parseInt((mainPin.style.top), 10) + Math.round(mainPinHeight / 2);
+const mainPinY = parseInt((mainPin.style.top), 10) + Math.round(mainPinHeight);
 
 address.value = `${mainPinX}, ${mainPinY}`;
 
