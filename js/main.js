@@ -70,18 +70,21 @@ function makeHotelArray() {
 }
 
 const map = document.querySelector('.map');
-map.classList.remove('map--faded');
 
 const hotelTemplate = document.querySelector('#pin').content
 .querySelector('.map__pin');
 
 const mapPins = document.querySelector('.map__pins');
 
+const withPin = 50;
+// const hightPin = 70;
+
 hotels.forEach(function (item, i) {
   const hotelElement = hotelTemplate.cloneNode(true);
   const avatarImage = hotelElement.querySelector('img');
-  hotelElement.style.left = hotels[i].location.x + 'px';
-  hotelElement.style.top = hotels[i].location.y + 'px';
+  hotelElement.style.left = `${hotels[i].location.x + (withPin / 2)}px`;
+  hotelElement.style.top = `${hotels[i].location.y}px`;
+  hotelElement.setAttribute('hidden', 'true');
   avatarImage.src = hotels[i].author.avatar;
   avatarImage.alt = hotels[i].offer.title;
 
@@ -96,7 +99,7 @@ let renderCard = function () {
   let userCardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
   // записываем массив с данными для первого предложения в переменную
-  const firstAd = hotels[0];
+  const firstAd = hotels[1];
 
   // записываем клонированный шаблон в переменную
   const popupCard = userCardTemplate.cloneNode(true);
@@ -161,6 +164,113 @@ const insertCard = function () {
   const mapfiltersContainer = map.querySelector('.map__filters-container');
   map.insertBefore(renderCard(), mapfiltersContainer);
 };
-
-// вставляем карточку
 insertCard();
+// Личный проект: доверяй, но проверяй (часть 1)
+
+const adForm = document.querySelector('.ad-form');
+const disabledFormElements = document.querySelectorAll('.ad-form fieldset, .map__filters select, .map__filters fieldset');
+const mapCards = document.querySelectorAll('.map__card');
+const pins = document.querySelectorAll('.map__pin');
+const mainPin = document.querySelector('.map__pin--main');
+const resetButton = document.querySelector('.ad-form__reset');
+
+const addAttribute = function (elements, attribute) {
+  for (let i = 0; i < elements.length; i++) {
+    elements[i].setAttribute(attribute, '');
+  }
+};
+
+const removeAttribute = function (elements, attribute) {
+  for (let i = 0; i < elements.length; i++) {
+    elements[i].removeAttribute(attribute, '');
+  }
+};
+
+const disableElements = function () {
+  addAttribute(disabledFormElements, 'disabled');
+  addAttribute(mapCards, 'hidden');
+};
+
+const showElements = function () {
+  removeAttribute(disabledFormElements, 'disabled');
+  removeAttribute(mapCards, 'hidden');
+  removeAttribute(pins, 'hidden');
+};
+
+function resetForms() {
+  const forms = document.querySelectorAll('form');
+  for (let i = 0; i < forms.length; i++) {
+    forms[i].reset();
+  }
+}
+
+disableElements(); // по дефолту запущена, переопределяется при активации
+
+// функция активации страницы
+const activation = function () {
+  makeHotelArray();
+  showElements();
+  adForm.classList.remove('ad-form--disabled');
+  map.classList.remove('map--faded');
+
+  address.value = `${mainPinX}, ${mainPinY}`;
+};
+
+let notActivatedYet = true;
+mainPin.addEventListener('mousedown', function (evt) {
+  if (evt.button !== 0) {
+    return;
+  } else {
+    activation();
+    notActivatedYet = false;
+  }
+});
+
+mainPin.addEventListener('keydown', function (evt) {
+  if (notActivatedYet === false) {
+    return;
+  } else if (evt.key === 'Enter') {
+    activation();
+    notActivatedYet = false;
+  }
+});
+
+resetButton.addEventListener('click', function () {
+  resetForms();
+  disableElements();
+  addAttribute(pins, 'hidden');
+  adForm.classList.add('ad-form--disabled');
+  map.classList.add('map--faded');
+  document.querySelector('.map__pin--main').removeAttribute('hidden', 'true');
+});
+
+// Заполнение поля адреса
+const address = document.querySelector('#address');
+
+const mainPinWidth = 65;
+const mainPinHeight = 80;
+const mainPinX = parseInt((mainPin.style.left), 10) + Math.round(mainPinWidth / 2);
+const mainPinY = parseInt((mainPin.style.top), 10) + Math.round(mainPinHeight);
+
+address.value = `${mainPinX}, ${mainPinY}`;
+
+// Непростая валидация
+
+// обработчик события 'change' на форме
+const onAdFormChange = function () {
+  const roomNumber = document.querySelector('#room_number');
+  const capacity = document.querySelector('#capacity');
+
+  // количество комнат -- количество гостей
+  roomNumber.setCustomValidity('');
+  if ((roomNumber.value === '100') && (capacity.value !== '0')) {
+    roomNumber.setCustomValidity('100 комнат не для гостей');
+  } else if (roomNumber.value < capacity.value) {
+    roomNumber.setCustomValidity('Количество мест не может превышать количество комнат');
+  } else if (roomNumber.value !== '100' && capacity.value === '0') {
+    roomNumber.setCustomValidity('Необходио указать количество мест');
+  }
+};
+
+// запуск валидации по событию 'change' на форме
+adForm.addEventListener('change', onAdFormChange);
