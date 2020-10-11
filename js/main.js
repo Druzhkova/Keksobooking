@@ -95,12 +95,11 @@ hotels.forEach(function (item, i) {
 
 // Личный проект: больше деталей (часть 2)
 
-let renderCard = function () {
+let renderCard = function (index) {
   let userCardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
   // записываем массив с данными для первого предложения в переменную
-  const firstAd = hotels[1];
-
+  let firstAd = index;
   // записываем клонированный шаблон в переменную
   const popupCard = userCardTemplate.cloneNode(true);
 
@@ -160,17 +159,40 @@ let renderCard = function () {
 };
 
 // функция вставки карточки в DOM
-const insertCard = function () {
+const insertCard = function (index) {
   const mapfiltersContainer = map.querySelector('.map__filters-container');
-  map.insertBefore(renderCard(), mapfiltersContainer);
+  map.insertBefore(renderCard(index), mapfiltersContainer);
+  closePopup();
 };
-insertCard();
+
+// открытие карточки любого доступного объявления по нажатию на пин
+
+const pins = document.querySelectorAll('.map__pin');
+
+for (let i = 0; i < pins.length; i++) {
+  pins[i].addEventListener('click', function () {
+    if (pins[i].className === 'map__pin map__pin--main') {
+      insertCard(hotels[1]);
+    } else {
+      insertCard(hotels[i - 1]);
+    }
+  });
+  pins[i].addEventListener('keydown', function (evt) { // открытие окна по нажатию кнопки ENTER, когда кнопка в фокусе
+    if (evt.key === 'Enter') {
+      if (pins[i].className === 'map__pin map__pin--main') {
+        insertCard(hotels[1]);
+      } else {
+        insertCard(hotels[i - 1]);
+      }
+    }
+  });
+}
+
 // Личный проект: доверяй, но проверяй (часть 1)
 
 const adForm = document.querySelector('.ad-form');
 const disabledFormElements = document.querySelectorAll('.ad-form fieldset, .map__filters select, .map__filters fieldset');
 const mapCards = document.querySelectorAll('.map__card');
-const pins = document.querySelectorAll('.map__pin');
 const mainPin = document.querySelector('.map__pin--main');
 const resetButton = document.querySelector('.ad-form__reset');
 
@@ -272,5 +294,69 @@ const onAdFormChange = function () {
   }
 };
 
+const price = document.querySelector('#price');
+const type = document.querySelector('#type');
+
+if (type.value === 'flat' && +price.value < 1000) {
+  price.setCustomValidity('Минимальная цена квартиры за ночь должна быть больше 1000');
+}
+
+type.addEventListener('change', function () {
+  if (type.value === 'bungalow') {
+    if (+price.value < 0) {
+      price.setCustomValidity('Минимальная цена бунгалы за ночь должна быть больше 0');
+    } else {
+      price.setCustomValidity('');
+    }
+  } else if (type.value === 'flat') {
+    if (+price.value < 1000) {
+      price.setCustomValidity('Минимальная цена квартиры за ночь должна быть больше 1000');
+    } else {
+      price.setCustomValidity('');
+    }
+  } else if (type.value === 'house') {
+    if (+price.value < 5000) {
+      price.setCustomValidity('Минимальная цена дома за ночь должна быть больше 5000');
+    } else {
+      price.setCustomValidity('');
+    }
+  } else if (type.value === 'palace') {
+    if (+price.value < 10000) {
+      price.setCustomValidity('Минимальная цена дворца за ночь должна быть больше 10000');
+    } else {
+      price.setCustomValidity('');
+    }
+  }
+  price.reportValidity();
+});
+
+const timeIn = document.querySelector('#timein');
+const timeOut = document.querySelector('#timeout');
+
+timeOut.addEventListener('change', function () {
+  timeIn.value = timeOut.value;
+});
+timeIn.addEventListener('change', function () {
+  timeOut.value = timeIn.value;
+});
+
 // запуск валидации по событию 'change' на форме
 adForm.addEventListener('change', onAdFormChange);
+
+function closePopup() {
+  const buttonClose = document.querySelectorAll('.popup__close');
+  for (let i = 0; i < buttonClose.length; i++) {
+    buttonClose[i].addEventListener('click', function () {
+      for (let k = 0; k < buttonClose.length; k++) {
+        buttonClose[k].parentElement.style.visibility = 'hidden';
+      }
+    });
+    buttonClose[i].addEventListener('keydown', function (evt) { // закрытие окна по нажатию кнопки ENTER, когда кнопка закрытия в фокусе
+      for (let k = 0; k < buttonClose.length; k++) {
+        if (evt.key === 'Enter') {
+          buttonClose[k].parentElement.style.visibility = 'hidden';
+        }
+      }
+    });
+  }
+}
