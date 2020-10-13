@@ -240,6 +240,7 @@ const activation = function () {
   showElements();
   adForm.classList.remove('ad-form--disabled');
   map.classList.remove('map--faded');
+  mainPin.setAttribute('disabled', '')
 
   address.value = `${mainPinX}, ${mainPinY}`;
 };
