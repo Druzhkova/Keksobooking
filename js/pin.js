@@ -1,22 +1,34 @@
 'use strict';
 
 (function () {
-  const withPin = 50;
   const renderCard = window.card.renderCard;
-  const hotels = window.data.hotels;
+  const map = window.card.map;
+  const getRandomNumb = window.util.getRandomNumb;
+
+  const xCoordinateFrom = 130;
+  const xCoordinateTo = 630;
+  const yCoordinateTo = 1100;
+
+  function getCoordinateX() {
+    return getRandomNumb(0, yCoordinateTo);
+  }
+
+  function getCoordinateY() {
+    return getRandomNumb(xCoordinateFrom, xCoordinateTo);
+  }
+
   // функция рендеринга метки объявления
-  const renderPins = (index) => {
+  const renderPins = (hotel) => {
     // шаблон метки объявления
     const pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
     // записываем шаблон в переменную
     const pin = pinTemplate.cloneNode(true);
 
     const avatarImage = pin.querySelector('img');
-    pin.style.left = `${hotels[index].location.x + (withPin / 2)}px`;
-    pin.style.top = `${hotels[index].location.y}px`;
-    pin.setAttribute('hidden', 'true');
-    avatarImage.src = hotels[index].author.avatar;
-    avatarImage.alt = hotels[index].offer.title;
+    pin.style.left = `${getCoordinateX()}px`;
+    pin.style.top = `${getCoordinateY()}px`;
+    avatarImage.src = hotel.author.avatar;
+    avatarImage.alt = hotel.offer.title;
 
     pin.addEventListener('click', () => {
       const prevCard = document.querySelector('.map__card');
@@ -25,14 +37,25 @@
         window.util.removeElement(prevCard);
       }
       // передаем данные, конкретного блока которые можно отрисовать
-      renderCard(index);
+      renderCard(hotel);
     });
-
     return pin;
   };
 
+  function insertPins(data) {
+    // создаем фрагмент
+    const fragment = document.createDocumentFragment();
+    // вставляем в фрагмент пины
+    for (let i = 0; i < data.length; i++) {
+      fragment.appendChild(renderPins(data[i]));
+    }
+    // вставляем фрагмент в html
+    map.appendChild(fragment);
+  }
+
   window.pin = {
     renderPins,
+    insertPins
   };
 
 })();

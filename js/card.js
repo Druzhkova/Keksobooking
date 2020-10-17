@@ -2,31 +2,28 @@
 
 (function () {
   const map = document.querySelector('.map');
-
   const typesHotel = window.data.typesHotel;
   const features = window.data.features;
-  const addressImages = window.data.addressImages;
-  const hotels = window.data.hotels;
 
   // функция рендеринга карточки
-  let renderCard = function (index) {
+  let renderCard = function (hotel) {
     // шаблон модального окно с информацией об объявлении
     let userCardTemplate = document.querySelector('#card').content.querySelector('.map__card');
     // записываем шаблон в переменную
     const popupCard = userCardTemplate.cloneNode(true);
     // записываем данные из сгенерированного массива
-    popupCard.querySelector('.popup__title').textContent = hotels[index].offer.title;
-    popupCard.querySelector('.popup__text--address').textContent = hotels[index].offer.address;
-    popupCard.querySelector('.popup__text--price').textContent = `${hotels[index].offer.price} ₽/ночь`;
-    popupCard.querySelector('.popup__type').textContent = typesHotel[hotels[index].offer.type];
+    popupCard.querySelector('.popup__title').textContent = hotel.offer.title;
+    popupCard.querySelector('.popup__text--address').textContent = hotel.offer.address;
+    popupCard.querySelector('.popup__text--price').textContent = `${hotel.offer.price} ₽/ночь`;
+    popupCard.querySelector('.popup__type').textContent = typesHotel[hotel.offer.type];
     const popupFeatures = popupCard.querySelector('.popup__features');
     const popupPhotos = popupCard.querySelector('.popup__photos');
 
-    const room = plural(hotels[index].offer.rooms, ['комната', 'комнаты', 'комнат']);
-    const guest = plural(hotels[index].offer.guests, ['гостя', 'гостей', 'гостей']);
+    const room = plural(hotel.offer.rooms, ['комната', 'комнаты', 'комнат']);
+    const guest = plural(hotel.offer.guests, ['гостя', 'гостей', 'гостей']);
 
-    popupCard.querySelector('.popup__text--capacity').textContent = `${hotels[index].offer.rooms} ${room} для ${hotels[index].offer.guests} ${guest}`;
-    popupCard.querySelector('.popup__text--time').textContent = `Заезд после ${hotels[index].offer.checkin}, выезд до ${hotels[index].offer.checkout}`;
+    popupCard.querySelector('.popup__text--capacity').textContent = `${hotel.offer.rooms} ${room} для ${hotel.offer.guests} ${guest}`;
+    popupCard.querySelector('.popup__text--time').textContent = `Заезд после ${hotel.offer.checkin}, выезд до ${hotel.offer.checkout}`;
     // вывод доступных удобств
     while (popupFeatures.firstChild) {
       popupFeatures.removeChild(popupFeatures.firstChild);
@@ -39,19 +36,20 @@
       popupFeatures.appendChild(item);
     }
 
-    popupCard.querySelector('.popup__description').textContent = hotels[index].offer.description;
+    popupCard.querySelector('.popup__description').textContent = hotel.offer.description;
     // добавление фотографий в блок popupPhotos
     const img = popupPhotos.querySelector('.popup__photo');
     popupPhotos.removeChild(img);
 
     let insertedImg;
-    for (let num = 0; num < addressImages.length; num++) {
+
+    for (let j = 0; j < hotel.offer.photos.length; j++) {
       insertedImg = img.cloneNode(true);
-      insertedImg.src = addressImages[num];
+      insertedImg.src = hotel.offer.photos[j];
       popupPhotos.appendChild(insertedImg);
     }
 
-    popupCard.querySelector('.popup__avatar').src = hotels[index].author.avatar;
+    popupCard.querySelector('.popup__avatar').src = hotel.author.avatar;
 
     const buttonClose = popupCard.querySelector('.popup__close');
     // закрытие по нажатию иконки закрытия
@@ -70,9 +68,13 @@
     function removePopup() {
       window.util.removeElement(popupCard);
     }
-
     map.appendChild(popupCard);
+    return popupCard;
   };
+
+  function insertCard(data) {
+    map.appendChild(renderCard(data));
+  }
 
   // функция выбора окончаний
   function plural(n, forms) {
@@ -89,7 +91,8 @@
 
   window.card = {
     map,
-    renderCard
+    renderCard,
+    insertCard
   };
 
 })();

@@ -2,29 +2,21 @@
 
 (function () {
   // Заполнение поля адреса
-  const address = document.querySelector('#address');
-  const adForm = document.querySelector('.ad-form');
-  const mainPin = document.querySelector('.map__pin--main');
-  const pins = document.querySelectorAll('.map__pin');
-  const mainPinWidth = 65;
-  const mainPinHeight = 80;
-  const mainPinX = parseInt((mainPin.style.left), 10) + Math.round(mainPinWidth / 2);
-  const mainPinY = parseInt((mainPin.style.top), 10) + Math.round(mainPinHeight);
+  const address = window.main.address;
+  const adForm = window.main.adForm;
+  const mainPin = window.main.mainPin;
+  const pins = document.getElementsByClassName('map__pin');
+  const mainPinX = window.main.mainPinX;
+  const mainPinY = window.main.mainPinY;
   const resetButton = document.querySelector('.ad-form__reset');
-  const disabledFormElements = document.querySelectorAll('.ad-form fieldset, .map__filters select, .map__filters fieldset');
   const mapCards = document.querySelectorAll('.map__card');
+  const addAttributeDisabled = window.main.addAttributeDisabled;
 
   const removeElement = window.util.removeElement;
   const map = window.card.map;
 
-  const addAttribute = function (elements, attribute) {
-    for (let i = 0; i < elements.length; i++) {
-      elements[i].setAttribute(attribute, '');
-    }
-  };
-
   address.value = `${mainPinX}, ${mainPinY}`;
-  // обработчик события 'change' на форме
+
   const onAdFormChange = function () {
     const roomNumber = document.querySelector('#room_number');
     const capacity = document.querySelector('#capacity');
@@ -37,42 +29,24 @@
     } else if (roomNumber.value !== '100' && capacity.value === '0') {
       roomNumber.setCustomValidity('Необходио указать количество мест');
     }
+
+    const price = document.querySelector('#price');
+    const type = document.querySelector('#type');
+    // тип жилья -- цена
+    price.setCustomValidity('');
+    if ((type.value === 'bungalow') && (+price.value < 0)) {
+      price.setCustomValidity('Минимальная цена бунгалы за ночь должна быть больше 0');
+    } else if ((type.value === 'flat') && (+price.value < 1000)) {
+      price.setCustomValidity('Минимальная цена квартиры за ночь должна быть больше 1000');
+    } else if ((type.value === 'house') && (+price.value < 5000)) {
+      price.setCustomValidity('Минимальная цена дома за ночь должна быть больше 5000');
+    } else if ((type.value === 'palace') && (+price.value < 10000)) {
+      price.setCustomValidity('Минимальная цена дворца за ночь должна быть больше 10000');
+    }
   };
 
-  const price = document.querySelector('#price');
-  const type = document.querySelector('#type');
-
-  if (type.value === 'flat' && +price.value < 1000) {
-    price.setCustomValidity('Минимальная цена квартиры за ночь должна быть больше 1000');
-  }
-
-  type.addEventListener('change', function () {
-    if (type.value === 'bungalow') {
-      if (+price.value < 0) {
-        price.setCustomValidity('Минимальная цена бунгалы за ночь должна быть больше 0');
-      } else {
-        price.setCustomValidity('');
-      }
-    } else if (type.value === 'flat') {
-      if (+price.value < 1000) {
-        price.setCustomValidity('Минимальная цена квартиры за ночь должна быть больше 1000');
-      } else {
-        price.setCustomValidity('');
-      }
-    } else if (type.value === 'house') {
-      if (+price.value < 5000) {
-        price.setCustomValidity('Минимальная цена дома за ночь должна быть больше 5000');
-      } else {
-        price.setCustomValidity('');
-      }
-    } else if (type.value === 'palace') {
-      if (+price.value < 10000) {
-        price.setCustomValidity('Минимальная цена дворца за ночь должна быть больше 10000');
-      } else {
-        price.setCustomValidity('');
-      }
-    }
-  });
+  // запуск валидации по событию 'change' на форме
+  adForm.addEventListener('change', onAdFormChange);
 
   const timeIn = document.querySelector('#timein');
   const timeOut = document.querySelector('#timeout');
@@ -83,25 +57,19 @@
   timeIn.addEventListener('change', function () {
     timeOut.value = timeIn.value;
   });
-  // запуск валидации по событию 'change' на форме
-  adForm.addEventListener('change', onAdFormChange);
-
-  const disableElements = function () {
-    addAttribute(disabledFormElements, 'disabled');
-    addAttribute(mapCards, 'hidden');
-  };
 
   resetButton.addEventListener('click', function () {
-    resetForms();
-    disableElements();
-    addAttribute(pins, 'hidden');
-    adForm.classList.add('ad-form--disabled');
     map.classList.add('map--faded');
-    document.querySelector('.map__pin--main').removeAttribute('hidden', 'true');
+    adForm.classList.add('ad-form--disabled');
+    addAttributeDisabled();
+    resetForms();
     const prevCard = document.querySelector('.map__card');
     if (prevCard) {
       // удаляем модальное окно с информацией об объявлении, если есть
       removeElement(prevCard);
+    }
+    for (let i = 1; i < pins.length; i++) {
+      pins[i].style.visibility = 'hidden';
     }
   });
 
@@ -113,15 +81,9 @@
   }
 
   window.form = {
-    adForm,
-    address,
     mainPin,
-    disableElements,
     pins,
-    mainPinX,
-    mainPinY,
     mapCards,
-    disabledFormElements
   };
 
 })();
