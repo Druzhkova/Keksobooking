@@ -49,6 +49,12 @@
         showElements(data);
       }
     });
+
+    mainPin.addEventListener('keydown', function (evt) {
+      if (map.classList.contains('map--faded') && evt.key === 'Enter') {
+        showElements(data);
+      }
+    });
   }
 
   window.main = {
