@@ -49,15 +49,6 @@
         showElements(data);
       }
     });
-
-    mainPin.addEventListener('keydown', function (evt) {
-      if (notActivatedYet === false) {
-        return;
-      } else if (evt.key === 'Enter') {
-        showElements(data);
-        notActivatedYet = false;
-      }
-    });
   }
 
   window.main = {
