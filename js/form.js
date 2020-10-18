@@ -5,7 +5,6 @@
   const address = window.main.address;
   const adForm = window.main.adForm;
   const mainPin = window.main.mainPin;
-  const pins = document.getElementsByClassName('map__pin');
   const mainPinX = window.main.mainPinX;
   const mainPinY = window.main.mainPinY;
   const resetButton = document.querySelector('.ad-form__reset');
@@ -54,6 +53,7 @@
   timeOut.addEventListener('change', function () {
     timeIn.value = timeOut.value;
   });
+
   timeIn.addEventListener('change', function () {
     timeOut.value = timeIn.value;
   });
@@ -68,8 +68,10 @@
       // удаляем модальное окно с информацией об объявлении, если есть
       removeElement(prevCard);
     }
+    const pins = document.querySelectorAll('.map__pin');
+
     for (let i = 1; i < pins.length; i++) {
-      pins[i].style.visibility = 'hidden';
+      pins[i].remove();
     }
   });
 
@@ -82,7 +84,6 @@
 
   window.form = {
     mainPin,
-    pins,
     mapCards,
   };
 

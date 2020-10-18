@@ -36,23 +36,17 @@
 
   const showElements = function (data) {
     insertPins(data);
-    window.card.insertCard(data[1]);
     adForm.classList.remove('ad-form--disabled');
     map.classList.remove('map--faded');
     removeAttributeDisabled();
     address.value = `${mainPinX}, ${mainPinY}`;
   };
 
-  let notActivatedYet = true;
-
   function activation(data) {
 
     mainPin.addEventListener('mousedown', function (evt) {
-      if (notActivatedYet === false) {
-        return;
-      } else if (evt.button === 0) {
+      if (map.classList.contains('map--faded') && evt.button === 0) {
         showElements(data);
-        notActivatedYet = false;
       }
     });
 

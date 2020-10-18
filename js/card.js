@@ -31,7 +31,7 @@
 
     for (let i = 0; i < features.length; i++) {
       let item = document.createElement('li');
-      item.classList.add(`popup__feature`);
+      item.classList.add('popup__feature');
       item.classList.add(`popup__feature--${features[i]}`);
       popupFeatures.appendChild(item);
     }
@@ -72,10 +72,6 @@
     return popupCard;
   };
 
-  function insertCard(data) {
-    map.appendChild(renderCard(data));
-  }
-
   // функция выбора окончаний
   function plural(n, forms) {
     let id;
@@ -91,8 +87,7 @@
 
   window.card = {
     map,
-    renderCard,
-    insertCard
+    renderCard
   };
 
 })();
