@@ -4,6 +4,11 @@
   const escKeyCode = 27;
   const enterKeyCode = 13;
 
+  const onError = function (message) {
+    console.error(message);
+  };
+
+
   function isEscEvent(evt, action) {
     if (evt.keyCode === escKeyCode) {
       action();
@@ -33,6 +38,7 @@
     isEnterEvent,
     removeElement,
     returnsRandomData,
-    getRandomNumb
+    getRandomNumb,
+    onError
   };
 })();
