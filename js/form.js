@@ -68,11 +68,7 @@
       // удаляем модальное окно с информацией об объявлении, если есть
       removeElement(prevCard);
     }
-    const pins = document.querySelectorAll('.map__pin');
-
-    for (let i = 1; i < pins.length; i++) {
-      pins[i].remove();
-    }
+    window.util.deletePins()
   });
 
   function resetForms() {
