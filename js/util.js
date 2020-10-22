@@ -33,12 +33,21 @@
     element.remove();
   }
 
+  function deletePins() {
+    const pins = document.querySelectorAll('.map__pin');
+
+    for (let i = 1; i < pins.length; i++) {
+      pins[i].remove();
+    }
+  }
+
   window.util = {
     isEscEvent,
     isEnterEvent,
     removeElement,
     returnsRandomData,
     getRandomNumb,
-    onError
+    onError,
+    deletePins
   };
 })();

@@ -10,16 +10,14 @@
   const address = document.querySelector('#address');
   const disabledFormElements = document.querySelectorAll('.ad-form fieldset, .map__filters select, .map__filters fieldset');
   const housingType = document.querySelector('#housing-type');
+  const mapForm = document.querySelector('.map__filters');
   const insertPins = window.pin.insertPins;
   let housingTypeCurrentValue;
 
   let hotels = [];
 
-  housingType.addEventListener('change', function () {
-    const pins = document.querySelectorAll('.map__pin');
-    for (let i = 1; i < pins.length; i++) {
-      pins[i].remove();
-    }
+  mapForm.addEventListener('change', function () {
+    window.util.deletePins()
     housingTypeCurrentValue = housingType.value;
 
     if (housingTypeCurrentValue === 'any') {
@@ -34,11 +32,8 @@
     const sameTypeHotel = hotels.filter(function (hotel) {
       return hotel.offer.type === housingTypeCurrentValue;
     });
-    if (sameTypeHotel.length > 5) {
-      insertPins(sameTypeHotel.slice(4));
-    } else {
-      insertPins(sameTypeHotel);
-    }
+
+    insertPins(sameTypeHotel);
   };
 
   const onSuccess = function (data) {

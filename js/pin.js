@@ -8,6 +8,7 @@
   const xCoordinateFrom = 130;
   const xCoordinateTo = 630;
   const yCoordinateTo = 1100;
+  const maxPins = 5;
 
   function getCoordinateX() {
     return getRandomNumb(0, yCoordinateTo);
@@ -46,7 +47,8 @@
     // создаем фрагмент
     const fragment = document.createDocumentFragment();
     // вставляем в фрагмент пины
-    for (let i = 0; i < data.length; i++) {
+    let dataLength = data.length >= maxPins ? maxPins : data.length;
+    for (let i = 0; i < dataLength; i++) {
       fragment.appendChild(renderPins(data[i]));
     }
     // вставляем фрагмент в html
