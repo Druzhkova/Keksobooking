@@ -16,8 +16,8 @@
 
   let hotels = [];
 
-  mapForm.addEventListener('change', function () {
-    window.util.deletePins()
+  mapForm.addEventListener('change', () => {
+    window.util.deletePins();
     housingTypeCurrentValue = housingType.value;
 
     if (housingTypeCurrentValue === 'any') {
@@ -27,7 +27,7 @@
     }
   });
 
-  const updateData = function () {
+  const updateData = () => {
     housingTypeCurrentValue = housingType.value;
     const sameTypeHotel = hotels.filter(function (hotel) {
       return hotel.offer.type === housingTypeCurrentValue;
@@ -36,26 +36,26 @@
     insertPins(sameTypeHotel);
   };
 
-  const onSuccess = function (data) {
+  const onSuccess = (data) => {
     hotels = data;
     activation();
   };
 
   window.load('https://21.javascript.pages.academy/keksobooking/data', onSuccess, window.util.onError);
 
-  function removeAttributeDisabled() {
+  const removeAttributeDisabled = () => {
     for (let i = 0; i < disabledFormElements.length; i++) {
       disabledFormElements[i].removeAttribute('disabled');
     }
-  }
+  };
 
-  function addAttributeDisabled() {
+  const addAttributeDisabled = () => {
     for (let i = 0; i < disabledFormElements.length; i++) {
       disabledFormElements[i].setAttribute('disabled', '');
     }
-  }
+  };
 
-  const showElements = function () {
+  const showElements = () => {
     insertPins(hotels);
     adForm.classList.remove('ad-form--disabled');
     map.classList.remove('map--faded');
@@ -63,7 +63,7 @@
     address.value = `${mainPinX}, ${mainPinY}`;
   };
 
-  function activation() {
+  const activation = () => {
 
     mainPin.addEventListener('mousedown', function (evt) {
       if (map.classList.contains('map--faded') && evt.button === 0) {
@@ -76,7 +76,7 @@
         showElements();
       }
     });
-  }
+  };
 
   window.main = {
     adForm,

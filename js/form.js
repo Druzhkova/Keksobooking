@@ -13,10 +13,12 @@
 
   const removeElement = window.util.removeElement;
   const map = window.card.map;
+  const popUpError = window.data.popUpError;
+  const popUpSuccess = window.data.popUpSuccess;
 
   address.value = `${mainPinX}, ${mainPinY}`;
 
-  const onAdFormChange = function () {
+  const onAdFormChange = () => {
     const roomNumber = document.querySelector('#room_number');
     const capacity = document.querySelector('#capacity');
     // количество комнат -- количество гостей
@@ -50,15 +52,15 @@
   const timeIn = document.querySelector('#timein');
   const timeOut = document.querySelector('#timeout');
 
-  timeOut.addEventListener('change', function () {
+  timeOut.addEventListener('change', () => {
     timeIn.value = timeOut.value;
   });
 
-  timeIn.addEventListener('change', function () {
+  timeIn.addEventListener('change', () => {
     timeOut.value = timeIn.value;
   });
 
-  resetButton.addEventListener('click', function () {
+  const returnToInitialState = () => {
     map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
     addAttributeDisabled();
@@ -68,15 +70,49 @@
       // удаляем модальное окно с информацией об объявлении, если есть
       removeElement(prevCard);
     }
-    window.util.deletePins()
-  });
+    window.util.deletePins();
+  };
 
-  function resetForms() {
+  resetButton.addEventListener('click', () => returnToInitialState());
+
+  const resetForms = () => {
     const forms = document.querySelectorAll('form');
     for (let i = 0; i < forms.length; i++) {
       forms[i].reset();
     }
-  }
+  };
+
+  const onSuccess = () => {
+    returnToInitialState();
+    showPopUp(popUpSuccess);
+  };
+
+  const onError = () => {
+    showPopUp(popUpError);
+
+    const errorButton = popUpError.querySelector('.error__button');
+    errorButton.addEventListener('click', () => closePopUp());
+  };
+
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    window.upload(new FormData(adForm), onSuccess, onError);
+
+    document.addEventListener('keydown', (evt) => window.util.isEscEvent(evt, closePopUp));
+    document.addEventListener('click', () => closePopUp());
+  });
+
+  const showPopUp = (popup) => {
+    popup.classList.remove('hidden');
+  };
+
+  const closePopUp = () => {
+    if (!popUpError.classList.contains('hidden')) {
+      popUpError.classList.add('hidden');
+    } else if (!popUpSuccess.classList.contains('hidden')) {
+      popUpSuccess.classList.add('hidden');
+    }
+  };
 
   window.form = {
     mainPin,

@@ -10,13 +10,8 @@
   const yCoordinateTo = 1100;
   const maxPins = 5;
 
-  function getCoordinateX() {
-    return getRandomNumb(0, yCoordinateTo);
-  }
-
-  function getCoordinateY() {
-    return getRandomNumb(xCoordinateFrom, xCoordinateTo);
-  }
+  const getCoordinateX = () => getRandomNumb(0, yCoordinateTo);
+  const getCoordinateY = () => getRandomNumb(xCoordinateFrom, xCoordinateTo);
 
   // функция рендеринга метки объявления
   const renderPins = (hotel) => {

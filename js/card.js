@@ -6,7 +6,7 @@
   const features = window.data.features;
 
   // функция рендеринга карточки
-  let renderCard = function (hotel) {
+  let renderCard = (hotel) => {
     // шаблон модального окно с информацией об объявлении
     let userCardTemplate = document.querySelector('#card').content.querySelector('.map__card');
     // записываем шаблон в переменную
@@ -53,27 +53,19 @@
 
     const buttonClose = popupCard.querySelector('.popup__close');
     // закрытие по нажатию иконки закрытия
-    buttonClose.addEventListener('click', function () {
-      removePopup();
-    });
+    buttonClose.addEventListener('click', () => removePopup());
     // закрытие окна по нажатию кнопки ENTER, когда кнопка закрытия в фокусе
-    buttonClose.addEventListener('keydown', function (evt) {
-      window.util.isEnterEvent(evt, removePopup);
-    });
+    buttonClose.addEventListener('keydown', (evt) => window.util.isEnterEvent(evt, removePopup));
     // закрытие окна по нажатию кнопки ESCAPE
-    document.addEventListener('keydown', function (evt) {
-      window.util.isEscEvent(evt, removePopup);
-    });
+    document.addEventListener('keydown', (evt) => window.util.isEscEvent(evt, removePopup));
 
-    function removePopup() {
-      window.util.removeElement(popupCard);
-    }
+    const removePopup = () => window.util.removeElement(popupCard);
     map.appendChild(popupCard);
     return popupCard;
   };
 
   // функция выбора окончаний
-  function plural(n, forms) {
+  const plural = (n, forms) => {
     let id;
     if (n % 10 === 1 && n % 100 !== 11) {
       id = 0;
@@ -83,7 +75,7 @@
       id = 2;
     }
     return forms[id] || '';
-  }
+  };
 
   window.card = {
     map,
