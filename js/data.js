@@ -3,7 +3,7 @@
 (function () {
   const blockMain = document.querySelector('main');
 
-  const typesHotel = {
+  const typesHotels = {
     palace: 'Дворец',
     flat: 'Квартира',
     bungalo: 'Бунгало',
@@ -28,8 +28,9 @@
 
   window.data = {
     features,
-    typesHotel,
+    typesHotels,
     popUpError,
     popUpSuccess
   };
+
 })();

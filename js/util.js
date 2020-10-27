@@ -1,19 +1,17 @@
 'use strict';
 
 (function () {
-  const escKeyCode = 27;
-  const enterKeyCode = 13;
-
-  const onError = (message) => console.error(message);
+  const ESC_KEY_CODE = 27;
+  const ENTER_KEY_CODE = 13;
 
   const isEscEvent = (evt, action) => {
-    if (evt.keyCode === escKeyCode) {
+    if (evt.keyCode === ESC_KEY_CODE) {
       action();
     }
   };
 
   const isEnterEvent = (evt, action) => {
-    if (evt.keyCode === enterKeyCode) {
+    if (evt.keyCode === ENTER_KEY_CODE) {
       action();
     }
   };
@@ -30,13 +28,61 @@
     }
   };
 
+  function processingRequests(url, onSuccess, onError, requestMethod, data) {
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
+
+    const XHR_STATUS_SUCCESSFUL_RESPONSES = 200;
+    const XHR_STATUS_CLIENT_ERROR = 400;
+    const XHR_STATUS_SERVER_ERROR = 500;
+    const XHR_TIMEOUT = 10000; // 10s
+
+    xhr.addEventListener('load', () => {
+      let error;
+      switch (xhr.status) {
+        case XHR_STATUS_SUCCESSFUL_RESPONSES:
+          onSuccess(xhr.response);
+          break;
+
+        case XHR_STATUS_CLIENT_ERROR:
+          error = 'Неверный запрос';
+          break;
+
+        case XHR_STATUS_SERVER_ERROR:
+          error = 'Внутренняя ошибка сервера';
+          break;
+
+        default:
+          error = 'Cтатус ответа: : ' + xhr.status + ' ' + xhr.statusText;
+      }
+
+      if (error) {
+        onError(error);
+      }
+    });
+
+    xhr.addEventListener('error', function () {
+      onError('Произошла ошибка соединения');
+    });
+
+    xhr.addEventListener('timeout', function () {
+      onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+    });
+
+    xhr.timeout = XHR_TIMEOUT; // 10s
+
+    xhr.open(requestMethod, url);
+    xhr.send(data);
+  }
+
   window.util = {
     isEscEvent,
     isEnterEvent,
     removeElement,
     returnsRandomData,
     getRandomNumb,
-    onError,
-    deletePins
+    deletePins,
+    processingRequests
   };
+
 })();

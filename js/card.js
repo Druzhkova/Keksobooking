@@ -2,7 +2,7 @@
 
 (function () {
   const map = document.querySelector('.map');
-  const typesHotel = window.data.typesHotel;
+  const typesHotels = window.data.typesHotels;
   const features = window.data.features;
 
   // функция рендеринга карточки
@@ -15,7 +15,7 @@
     popupCard.querySelector('.popup__title').textContent = hotel.offer.title;
     popupCard.querySelector('.popup__text--address').textContent = hotel.offer.address;
     popupCard.querySelector('.popup__text--price').textContent = `${hotel.offer.price} ₽/ночь`;
-    popupCard.querySelector('.popup__type').textContent = typesHotel[hotel.offer.type];
+    popupCard.querySelector('.popup__type').textContent = typesHotels[hotel.offer.type];
     const popupFeatures = popupCard.querySelector('.popup__features');
     const popupPhotos = popupCard.querySelector('.popup__photos');
 
@@ -78,7 +78,6 @@
   };
 
   window.card = {
-    map,
     renderCard
   };
 

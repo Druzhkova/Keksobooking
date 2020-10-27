@@ -1,17 +1,17 @@
 'use strict';
 
 (function () {
-  const renderCard = window.card.renderCard;
-  const map = window.card.map;
+  const map = document.querySelector('.map');
   const getRandomNumb = window.util.getRandomNumb;
+  const renderCard = window.card.renderCard;
 
-  const xCoordinateFrom = 130;
-  const xCoordinateTo = 630;
-  const yCoordinateTo = 1100;
-  const maxPins = 5;
+  const X_COORDINATE_FROM = 130;
+  const X_COORDINATE_TO = 630;
+  const Y_COORDINATE_TO = 1100;
+  const MAX_PINS = 5;
 
-  const getCoordinateX = () => getRandomNumb(0, yCoordinateTo);
-  const getCoordinateY = () => getRandomNumb(xCoordinateFrom, xCoordinateTo);
+  const getCoordinateX = () => getRandomNumb(0, Y_COORDINATE_TO);
+  const getCoordinateY = () => getRandomNumb(X_COORDINATE_FROM, X_COORDINATE_TO);
 
   // функция рендеринга метки объявления
   const renderPins = (hotel) => {
@@ -42,7 +42,7 @@
     // создаем фрагмент
     const fragment = document.createDocumentFragment();
     // вставляем в фрагмент пины
-    let dataLength = data.length >= maxPins ? maxPins : data.length;
+    let dataLength = data.length >= MAX_PINS ? MAX_PINS : data.length;
     for (let i = 0; i < dataLength; i++) {
       fragment.appendChild(renderPins(data[i]));
     }

@@ -1,19 +1,19 @@
 'use strict';
 (function () {
-  const map = window.card.map;
+  const MAIN_PIN_WIDTH = 65;
+  const MAIN_PIN_HEIGHT = 80;
+  const map = document.querySelector('.map');
   const adForm = document.querySelector('.ad-form');
   const mainPin = document.querySelector('.map__pin--main');
-  const mainPinWidth = 65;
-  const mainPinHeight = 80;
-  const mainPinX = parseInt((mainPin.style.left), 10) + Math.round(mainPinWidth / 2);
-  const mainPinY = parseInt((mainPin.style.top), 10) + Math.round(mainPinHeight);
   const address = document.querySelector('#address');
-  const disabledFormElements = document.querySelectorAll('.ad-form fieldset, .map__filters select, .map__filters fieldset');
   const housingType = document.querySelector('#housing-type');
   const mapForm = document.querySelector('.map__filters');
+  const disabledFormElements = document.querySelectorAll('.ad-form fieldset, .map__filters select, .map__filters fieldset');
+  const mainPinX = parseInt((mainPin.style.left), 10) + Math.round(MAIN_PIN_WIDTH / 2);
+  const mainPinY = parseInt((mainPin.style.top), 10) + Math.round(MAIN_PIN_HEIGHT);
+
   const insertPins = window.pin.insertPins;
   let housingTypeCurrentValue;
-
   let hotels = [];
 
   mapForm.addEventListener('change', () => {
@@ -41,7 +41,9 @@
     activation();
   };
 
-  window.load('https://21.javascript.pages.academy/keksobooking/data', onSuccess, window.util.onError);
+  const onError = (message) => console.error(message);
+
+  window.load('https://21.javascript.pages.academy/keksobooking/data', onSuccess, onError);
 
   const removeAttributeDisabled = () => {
     for (let i = 0; i < disabledFormElements.length; i++) {
@@ -57,9 +59,9 @@
 
   const showElements = () => {
     insertPins(hotels);
+    removeAttributeDisabled();
     adForm.classList.remove('ad-form--disabled');
     map.classList.remove('map--faded');
-    removeAttributeDisabled();
     address.value = `${mainPinX}, ${mainPinY}`;
   };
 
@@ -79,11 +81,8 @@
   };
 
   window.main = {
-    adForm,
-    mainPin,
     mainPinX,
     mainPinY,
-    address,
     disabledFormElements,
     addAttributeDisabled,
   };

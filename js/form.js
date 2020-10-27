@@ -2,19 +2,19 @@
 
 (function () {
   // Заполнение поля адреса
-  const address = window.main.address;
-  const adForm = window.main.adForm;
-  const mainPin = window.main.mainPin;
-  const mainPinX = window.main.mainPinX;
-  const mainPinY = window.main.mainPinY;
+  const address = document.querySelector('#address');
+  const adForm = document.querySelector('.ad-form');
+  const mainPin = document.querySelector('.map__pin--main');
   const resetButton = document.querySelector('.ad-form__reset');
   const mapCards = document.querySelectorAll('.map__card');
-  const addAttributeDisabled = window.main.addAttributeDisabled;
+  const map = document.querySelector('.map');
 
-  const removeElement = window.util.removeElement;
-  const map = window.card.map;
+  const addAttributeDisabled = window.main.addAttributeDisabled;
+  const mainPinX = window.main.mainPinX;
+  const mainPinY = window.main.mainPinY;
   const popUpError = window.data.popUpError;
   const popUpSuccess = window.data.popUpSuccess;
+  const removeElement = window.util.removeElement;
 
   address.value = `${mainPinX}, ${mainPinY}`;
 
