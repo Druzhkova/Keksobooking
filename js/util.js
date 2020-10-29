@@ -1,44 +1,78 @@
 'use strict';
 
 (function () {
-  const escKeyCode = 27;
-  const enterKeyCode = 13;
+  const ESC_KEY_CODE = 27;
+  const ENTER_KEY_CODE = 13;
 
-  const onError = function (message) {
-    console.error(message);
+  const isEscEvent = (evt, action) => {
+    if (evt.keyCode === ESC_KEY_CODE) {
+      action();
+    }
   };
 
-
-  function isEscEvent(evt, action) {
-    if (evt.keyCode === escKeyCode) {
+  const isEnterEvent = (evt, action) => {
+    if (evt.keyCode === ENTER_KEY_CODE) {
       action();
     }
-  }
+  };
 
-  function isEnterEvent(evt, action) {
-    if (evt.keyCode === enterKeyCode) {
-      action();
-    }
-  }
+  const returnsRandomData = (arr) => arr[Math.floor(Math.random() * arr.length)];
+  const getRandomNumb = (min, max) => Math.floor(Math.random() * (max - min) + min);
+  const removeElement = (element) => element.remove();
 
-  function returnsRandomData(arr) {
-    return arr[Math.floor(Math.random() * arr.length)];
-  }
-
-  function getRandomNumb(min, max) {
-    return Math.floor(Math.random() * (max - min) + min);
-  }
-
-  function removeElement(element) {
-    element.remove();
-  }
-
-  function deletePins() {
+  const deletePins = () => {
     const pins = document.querySelectorAll('.map__pin');
 
     for (let i = 1; i < pins.length; i++) {
       pins[i].remove();
     }
+  };
+
+  function processingRequests(url, onSuccess, onError, requestMethod, data) {
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
+
+    const XHR_STATUS_SUCCESSFUL_RESPONSES = 200;
+    const XHR_STATUS_CLIENT_ERROR = 400;
+    const XHR_STATUS_SERVER_ERROR = 500;
+    const XHR_TIMEOUT = 10000; // 10s
+
+    xhr.addEventListener('load', () => {
+      let error;
+      switch (xhr.status) {
+        case XHR_STATUS_SUCCESSFUL_RESPONSES:
+          onSuccess(xhr.response);
+          break;
+
+        case XHR_STATUS_CLIENT_ERROR:
+          error = 'Неверный запрос';
+          break;
+
+        case XHR_STATUS_SERVER_ERROR:
+          error = 'Внутренняя ошибка сервера';
+          break;
+
+        default:
+          error = 'Cтатус ответа: : ' + xhr.status + ' ' + xhr.statusText;
+      }
+
+      if (error) {
+        onError(error);
+      }
+    });
+
+    xhr.addEventListener('error', function () {
+      onError('Произошла ошибка соединения');
+    });
+
+    xhr.addEventListener('timeout', function () {
+      onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+    });
+
+    xhr.timeout = XHR_TIMEOUT; // 10s
+
+    xhr.open(requestMethod, url);
+    xhr.send(data);
   }
 
   window.util = {
@@ -47,7 +81,8 @@
     removeElement,
     returnsRandomData,
     getRandomNumb,
-    onError,
-    deletePins
+    deletePins,
+    processingRequests
   };
+
 })();
