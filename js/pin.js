@@ -2,16 +2,60 @@
 
 (function () {
   const map = document.querySelector('.map');
+  const mainPin = document.querySelector('.map__pin--main');
+  const address = document.querySelector('#address');
   const getRandomNumb = window.util.getRandomNumb;
   const renderCard = window.card.renderCard;
 
-  const X_COORDINATE_FROM = 130;
-  const X_COORDINATE_TO = 630;
-  const Y_COORDINATE_TO = 1100;
+  const Y_COORDINATE_FROM = 130;
+  const Y_COORDINATE_TO = 630;
+  const X_COORDINATE_TO = 1100;
   const MAX_PINS = 5;
 
-  const getCoordinateX = () => getRandomNumb(0, Y_COORDINATE_TO);
-  const getCoordinateY = () => getRandomNumb(X_COORDINATE_FROM, X_COORDINATE_TO);
+  const initialCoords = {
+    x: mainPin.offsetLeft,
+    y: mainPin.offsetTop
+  };
+
+  const pinCoordinates = Object.assign({}, initialCoords);
+
+  const dragAndDrop = (container, element, coordinates) => {
+    element.addEventListener("mousedown", (evt) => {
+      evt.preventDefault();
+      const mouseMoveHandler = (moveEvt) => {
+        moveEvt.preventDefault();
+        let x = moveEvt.clientX - container.offsetLeft;
+        let y = moveEvt.clientY - container.offsetTop;
+
+        if (y < Y_COORDINATE_TO + (element.clientHeight / 2) && y > Y_COORDINATE_FROM - (element.clientHeight / 2)) {
+          coordinates.y = y;
+        }
+
+        if (x > (element.clientWidth / 2) && x < container.clientWidth - (element.clientWidth / 2)) {
+          coordinates.x = x;
+        }
+
+        element.style.top = coordinates.y - (element.clientHeight / 2) + "px";
+        element.style.left = coordinates.x - (element.clientWidth / 2) + "px";
+
+        address.value = `${element.style.left}, ${element.style.top}`;
+      };
+
+      const mouseUpHandler = (upEvt) => {
+        upEvt.preventDefault();
+        document.removeEventListener("mousemove", mouseMoveHandler);
+        document.removeEventListener("mouseup", mouseUpHandler);
+      };
+
+      document.addEventListener("mousemove", mouseMoveHandler);
+      document.addEventListener("mouseup", mouseUpHandler);
+    });
+  };
+
+  dragAndDrop(map, mainPin, pinCoordinates);
+
+  const getCoordinateX = () => getRandomNumb(0, X_COORDINATE_TO);
+  const getCoordinateY = () => getRandomNumb(Y_COORDINATE_FROM, Y_COORDINATE_TO);
 
   // функция рендеринга метки объявления
   const renderPins = (hotel) => {
