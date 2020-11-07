@@ -1,9 +1,9 @@
 'use strict';
 
 (function () {
-  const map = document.querySelector('.map');
-  const mainPin = document.querySelector('.map__pin--main');
-  const address = document.querySelector('#address');
+  const map = document.querySelector(`.map`);
+  const mainPin = document.querySelector(`.map__pin--main`);
+  const address = document.querySelector(`#address`);
   const getRandomNumb = window.util.getRandomNumb;
   const renderCard = window.card.renderCard;
 
@@ -20,7 +20,7 @@
   const pinCoordinates = Object.assign({}, initialCoords);
 
   const dragAndDrop = (container, element, coordinates) => {
-    element.addEventListener("mousedown", (evt) => {
+    element.addEventListener(`mousedown`, (evt) => {
       evt.preventDefault();
       const mouseMoveHandler = (moveEvt) => {
         moveEvt.preventDefault();
@@ -35,20 +35,20 @@
           coordinates.x = x;
         }
 
-        element.style.top = coordinates.y - (element.clientHeight / 2) + "px";
-        element.style.left = coordinates.x - (element.clientWidth / 2) + "px";
+        element.style.top = coordinates.y - (element.clientHeight / 2) + `px`;
+        element.style.left = coordinates.x - (element.clientWidth / 2) + `px`;
 
         address.value = `${element.style.left}, ${element.style.top}`;
       };
 
       const mouseUpHandler = (upEvt) => {
         upEvt.preventDefault();
-        document.removeEventListener("mousemove", mouseMoveHandler);
-        document.removeEventListener("mouseup", mouseUpHandler);
+        document.removeEventListener(`mousemove`, mouseMoveHandler);
+        document.removeEventListener(`mouseup`, mouseUpHandler);
       };
 
-      document.addEventListener("mousemove", mouseMoveHandler);
-      document.addEventListener("mouseup", mouseUpHandler);
+      document.addEventListener(`mousemove`, mouseMoveHandler);
+      document.addEventListener(`mouseup`, mouseUpHandler);
     });
   };
 
@@ -60,18 +60,18 @@
   // функция рендеринга метки объявления
   const renderPins = (hotel) => {
     // шаблон метки объявления
-    const pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+    const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
     // записываем шаблон в переменную
     const pin = pinTemplate.cloneNode(true);
 
-    const avatarImage = pin.querySelector('img');
+    const avatarImage = pin.querySelector(`img`);
     pin.style.left = `${getCoordinateX()}px`;
     pin.style.top = `${getCoordinateY()}px`;
     avatarImage.src = hotel.author.avatar;
     avatarImage.alt = hotel.offer.title;
 
-    pin.addEventListener('click', () => {
-      const prevCard = document.querySelector('.map__card');
+    pin.addEventListener(`click`, () => {
+      const prevCard = document.querySelector(`.map__card`);
       if (prevCard) {
         // удаляем модальное окно с информацией об объявлении, если есть
         window.util.removeElement(prevCard);

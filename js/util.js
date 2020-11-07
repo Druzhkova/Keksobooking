@@ -21,7 +21,7 @@
   const removeElement = (element) => element.remove();
 
   const deletePins = () => {
-    const pins = document.querySelectorAll('.map__pin');
+    const pins = document.querySelectorAll(`.map__pin`);
 
     for (let i = 1; i < pins.length; i++) {
       pins[i].remove();
@@ -30,14 +30,14 @@
 
   function processingRequests(url, onSuccess, onError, requestMethod, data) {
     const xhr = new XMLHttpRequest();
-    xhr.responseType = 'json';
+    xhr.responseType = `json`;
 
     const XHR_STATUS_SUCCESSFUL_RESPONSES = 200;
     const XHR_STATUS_CLIENT_ERROR = 400;
     const XHR_STATUS_SERVER_ERROR = 500;
     const XHR_TIMEOUT = 10000; // 10s
 
-    xhr.addEventListener('load', () => {
+    xhr.addEventListener(`load`, () => {
       let error;
       switch (xhr.status) {
         case XHR_STATUS_SUCCESSFUL_RESPONSES:
@@ -45,15 +45,15 @@
           break;
 
         case XHR_STATUS_CLIENT_ERROR:
-          error = 'Неверный запрос';
+          error = `Неверный запрос`;
           break;
 
         case XHR_STATUS_SERVER_ERROR:
-          error = 'Внутренняя ошибка сервера';
+          error = `Внутренняя ошибка сервера`;
           break;
 
         default:
-          error = 'Cтатус ответа: : ' + xhr.status + ' ' + xhr.statusText;
+          error = `Cтатус ответа: : ` + xhr.status + ` ` + xhr.statusText;
       }
 
       if (error) {
@@ -61,12 +61,12 @@
       }
     });
 
-    xhr.addEventListener('error', function () {
-      onError('Произошла ошибка соединения');
+    xhr.addEventListener(`error`, function () {
+      onError(`Произошла ошибка соединения`);
     });
 
-    xhr.addEventListener('timeout', function () {
-      onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+    xhr.addEventListener(`timeout`, function () {
+      onError(`Запрос не успел выполниться за ` + xhr.timeout + `мс`);
     });
 
     xhr.timeout = XHR_TIMEOUT; // 10s
