@@ -33,25 +33,34 @@
   };
 
   const filterHotelType = () => {
-    filterData = filterData.filter((hotel) =>  hotel.offer.type === housingType.value)
+    filterData = filterData.filter((hotel) => hotel.offer.type === housingType.value);
   };
 
   const filterHotelPrice = () => {
     let priceValue = housingPriceRange[housingPrice.value];
-    filterData = filterData.filter((hotel) => priceValue ? hotel.offer.price >= priceValue.MIN && hotel.offer.price <= priceValue.MAX : true)
+    if (housingPrice.value === `any`) {
+      return;
+    }
+    filterData = filterData.filter((hotel) => priceValue ? hotel.offer.price >= priceValue.MIN && hotel.offer.price <= priceValue.MAX : true);
   };
 
   const filterHotelRooms = function () {
+    if (housingRooms.value === `any`) {
+      return;
+    }
     filterData = filterData.filter((hotel) => hotel.offer.rooms === +housingRooms.value);
   };
 
   const filterHotelGuests = function () {
+    if (housingGuests.value === `any`) {
+      return;
+    }
     filterData = filterData.filter((hotel) => hotel.offer.guests === +housingGuests.value);
   };
 
   const filterHotelFeatures = function () {
     let checkedFeatures = featuresFieldset.querySelectorAll(`input:checked`);
-    filterData = filterData.filter((hotel) => Array.from(checkedFeatures).every((element) => hotel.offer.features.includes(element.value)))
+    filterData = filterData.filter((hotel) => Array.from(checkedFeatures).every((element) => hotel.offer.features.includes(element.value)));
   };
 
   const filtersChange = () => {
