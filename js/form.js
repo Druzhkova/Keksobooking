@@ -9,12 +9,13 @@
   const mapCards = document.querySelectorAll(`.map__card`);
   const map = document.querySelector(`.map`);
 
-  const addAttributeDisabled = window.main.addAttributeDisabled;
   const mainPinX = window.main.mainPinX;
   const mainPinY = window.main.mainPinY;
+  const disabledFormElements = window.main.disabledFormElements;
   const popUpError = window.data.popUpError;
   const popUpSuccess = window.data.popUpSuccess;
   const removeElement = window.util.removeElement;
+  const showPopUp = window.util.showPopUp;
 
   address.value = `${mainPinX}, ${mainPinY}`;
 
@@ -60,6 +61,12 @@
     timeOut.value = timeIn.value;
   });
 
+  const addAttributeDisabled = () => {
+    for (let i = 0; i < disabledFormElements.length; i++) {
+      disabledFormElements[i].setAttribute(`disabled`, ``);
+    }
+  };
+
   const returnToInitialState = () => {
     map.classList.add(`map--faded`);
     adForm.classList.add(`ad-form--disabled`);
@@ -74,6 +81,14 @@
   };
 
   resetButton.addEventListener(`click`, () => returnToInitialState());
+
+  const closePopUp = () => {
+    if (!popUpError.classList.contains(`hidden`)) {
+      popUpError.classList.add(`hidden`);
+    } else if (!popUpSuccess.classList.contains(`hidden`)) {
+      popUpSuccess.classList.add(`hidden`);
+    }
+  };
 
   const resetForms = () => {
     const forms = document.querySelectorAll(`form`);
@@ -98,21 +113,9 @@
     evt.preventDefault();
     window.upload(new FormData(adForm), onSuccess, onError);
 
-    document.addEventListener(`keydown`, (evt) => window.util.isEscEvent(evt, closePopUp));
+    document.addEventListener(`keydown`, (event) => window.util.isEscEvent(event, closePopUp));
     document.addEventListener(`click`, () => closePopUp());
   });
-
-  const showPopUp = (popup) => {
-    popup.classList.remove(`hidden`);
-  };
-
-  const closePopUp = () => {
-    if (!popUpError.classList.contains(`hidden`)) {
-      popUpError.classList.add(`hidden`);
-    } else if (!popUpSuccess.classList.contains(`hidden`)) {
-      popUpSuccess.classList.add(`hidden`);
-    }
-  };
 
   window.form = {
     mainPin,

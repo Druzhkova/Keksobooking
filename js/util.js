@@ -27,6 +27,10 @@
     }
   };
 
+  const showPopUp = (popup) => {
+    popup.classList.remove(`hidden`);
+  };
+
   function processingRequests(url, onSuccess, onError, requestMethod, data) {
     const xhr = new XMLHttpRequest();
     xhr.responseType = `json`;
@@ -80,7 +84,8 @@
     removeElement,
     returnsRandomData,
     deletePins,
-    processingRequests
+    processingRequests,
+    showPopUp
   };
 
 })();
