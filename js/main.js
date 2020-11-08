@@ -13,6 +13,8 @@
     parseInt(mainPin.style.top, 10) + Math.round(MAIN_PIN_HEIGHT);
 
   const insertPins = window.pin.insertPins;
+  const popUpError = window.data.popUpError;
+  const showPopUp = window.util.showPopUp;
 
   let hotels = [];
 
@@ -22,19 +24,26 @@
     activation();
   };
 
-  const onError = (message) => console.error(message);
+  const closePopUp = () => {
+    if (!popUpError.classList.contains(`hidden`)) {
+      popUpError.classList.add(`hidden`);
+    }
+  };
+
+  const onError = (message) => {
+    showPopUp(popUpError);
+    const errorMessage = popUpError.querySelector(`.error__message`);
+    errorMessage.textContent = `${message}`;
+
+    const errorButton = popUpError.querySelector(`.error__button`);
+    errorButton.addEventListener(`click`, () => closePopUp());
+  };
 
   window.load(`https://21.javascript.pages.academy/keksobooking/data`, onSuccess, onError);
 
   const removeAttributeDisabled = () => {
     for (let i = 0; i < disabledFormElements.length; i++) {
       disabledFormElements[i].removeAttribute(`disabled`);
-    }
-  };
-
-  const addAttributeDisabled = () => {
-    for (let i = 0; i < disabledFormElements.length; i++) {
-      disabledFormElements[i].setAttribute(`disabled`, ``);
     }
   };
 
@@ -64,7 +73,6 @@
     mainPinX,
     mainPinY,
     disabledFormElements,
-    addAttributeDisabled,
     hotels
   };
 })();

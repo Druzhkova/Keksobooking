@@ -33,8 +33,8 @@
           coordinates.x = x;
         }
 
-        element.style.top = coordinates.y - (element.clientHeight / 2) + `px`;
-        element.style.left = coordinates.x - (element.clientWidth / 2) + `px`;
+        element.style.top = Math.round(coordinates.y - (element.clientHeight / 2)) + `px`;
+        element.style.left = Math.round(coordinates.x - (element.clientWidth / 2)) + `px`;
 
         address.value = `${element.style.left}, ${element.style.top}`;
       };
