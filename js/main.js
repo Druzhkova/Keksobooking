@@ -17,6 +17,7 @@
   let hotels = [];
 
   const onSuccess = (data) => {
+    console.log(data)
     window.filters.activateFilters(data);
     hotels = data;
     activation();

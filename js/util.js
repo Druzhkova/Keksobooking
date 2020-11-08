@@ -17,7 +17,6 @@
   };
 
   const returnsRandomData = (arr) => arr[Math.floor(Math.random() * arr.length)];
-  const getRandomNumb = (min, max) => Math.floor(Math.random() * (max - min) + min);
   const removeElement = (element) => element.remove();
 
   const deletePins = () => {
@@ -80,7 +79,6 @@
     isEnterEvent,
     removeElement,
     returnsRandomData,
-    getRandomNumb,
     deletePins,
     processingRequests
   };

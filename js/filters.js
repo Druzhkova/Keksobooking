@@ -32,38 +32,37 @@
     }
   };
 
-  const filterElement = function (element, key, item) {
-    return element.value === `any` ? true : element.value === item[key].toString();
+  const filterHotelType = () => {
+    filterData = filterData.filter((hotel) =>  hotel.offer.type === housingType.value)
   };
 
-  const filterHotelType = (item) => {
-    return filterElement(housingType, `type`, item.offer);
-  };
-
-  const filterHotelPrice = function (item) {
+  const filterHotelPrice = () => {
     let priceValue = housingPriceRange[housingPrice.value];
-    return priceValue ? item.offer.price >= priceValue.MIN && item.offer.price <= priceValue.MAX : true;
+    filterData = filterData.filter((hotel) => priceValue ? hotel.offer.price >= priceValue.MIN && hotel.offer.price <= priceValue.MAX : true)
   };
 
-  const filterHotelRooms = function (item) {
-    return filterElement(housingRooms, `rooms`, item.offer);
+  const filterHotelRooms = function () {
+    filterData = filterData.filter((hotel) => hotel.offer.rooms === +housingRooms.value);
   };
 
-  const filterHotelGuests = function (item) {
-    return filterElement(housingGuests, `guests`, item.offer);
+  const filterHotelGuests = function () {
+    filterData = filterData.filter((hotel) => hotel.offer.guests === +housingGuests.value);
   };
 
-  const filterHotelFeatures = function (item) {
+  const filterHotelFeatures = function () {
     let checkedFeatures = featuresFieldset.querySelectorAll(`input:checked`);
-
-    return Array.from(checkedFeatures).every(function (element) {
-      return item.offer.features.includes(element.value);
-    });
+    filterData = filterData.filter((hotel) => Array.from(checkedFeatures).every((element) => hotel.offer.features.includes(element.value)))
   };
 
   const filtersChange = () => {
     filterData = data.slice();
-    filterData = filterData.filter(filterHotelType).filter(filterHotelPrice).filter(filterHotelRooms).filter(filterHotelGuests).filter(filterHotelFeatures);
+
+    filterHotelType();
+    filterHotelPrice();
+    filterHotelRooms();
+    filterHotelGuests();
+    filterHotelFeatures();
+
     const popup = document.querySelector(`.popup`);
     if (popup) {
       popup.remove();

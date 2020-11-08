@@ -4,12 +4,10 @@
   const map = document.querySelector(`.map`);
   const mainPin = document.querySelector(`.map__pin--main`);
   const address = document.querySelector(`#address`);
-  const getRandomNumb = window.util.getRandomNumb;
   const renderCard = window.card.renderCard;
 
   const Y_COORDINATE_FROM = 130;
   const Y_COORDINATE_TO = 630;
-  const X_COORDINATE_TO = 1100;
   const MAX_PINS = 5;
 
   const initialCoords = {
@@ -54,9 +52,6 @@
 
   dragAndDrop(map, mainPin, pinCoordinates);
 
-  const getCoordinateX = () => getRandomNumb(0, X_COORDINATE_TO);
-  const getCoordinateY = () => getRandomNumb(Y_COORDINATE_FROM, Y_COORDINATE_TO);
-
   // функция рендеринга метки объявления
   const renderPins = (hotel) => {
     // шаблон метки объявления
@@ -65,8 +60,8 @@
     const pin = pinTemplate.cloneNode(true);
 
     const avatarImage = pin.querySelector(`img`);
-    pin.style.left = `${getCoordinateX()}px`;
-    pin.style.top = `${getCoordinateY()}px`;
+    pin.style.left = `${hotel.location.x}px`;
+    pin.style.top = `${hotel.location.y}px`;
     avatarImage.src = hotel.author.avatar;
     avatarImage.alt = hotel.offer.title;
 
