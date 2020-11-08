@@ -33,7 +33,7 @@
   };
 
   const filterHotelType = () => {
-    if (housingPrice.value === `any`) {
+    if (housingType.value === `any`) {
       return;
     }
     filterData = filterData.filter((hotel) => hotel.offer.type === housingType.value);
