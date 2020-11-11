@@ -1,11 +1,11 @@
 "use strict";
 
 (function () {
-
   const MAX_LOW_PRICE = 9999;
   const MIN_MIDDLE_PRICE = 10000;
   const MAX_MIDDLE_PRICE = 50000;
   const MIN_HIGH_PRICE = 50001;
+  const DEBOUNCE_INTERVAL = 500; // ms
 
   const filter = document.querySelector(`.map__filters`);
   const housingType = document.querySelector(`#housing-type`);
@@ -66,7 +66,16 @@
     filterData = filterData.filter((hotel) => Array.from(checkedFeatures).every((element) => hotel.offer.features.includes(element.value)));
   };
 
-  const filtersChange = () => {
+  let lastTimeout;
+
+  const debounce = (fn) => {
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
+    }
+    lastTimeout = window.setTimeout(fn, DEBOUNCE_INTERVAL);
+  };
+
+  const filtersChangeHandler = () => {
     filterData = data.slice();
 
     filterHotelType();
@@ -83,13 +92,15 @@
     window.pin.insertPins(filterData);
   };
 
-  const activateFilters = function (adData) {
+  const activate = function (adData) {
     data = adData.slice();
-    filter.addEventListener(`change`, filtersChange);
+    filter.addEventListener(`change`, () => {
+      debounce(filtersChangeHandler);
+    });
     return adData;
   };
 
   window.filters = {
-    activateFilters
+    activate,
   };
 })();

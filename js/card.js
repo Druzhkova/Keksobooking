@@ -6,7 +6,7 @@
   const features = window.data.features;
 
   // функция рендеринга карточки
-  let renderCard = (hotel) => {
+  let render = (hotel) => {
     // шаблон модального окно с информацией об объявлении
     let userCardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
     // записываем шаблон в переменную
@@ -19,8 +19,8 @@
     const popupFeatures = popupCard.querySelector(`.popup__features`);
     const popupPhotos = popupCard.querySelector(`.popup__photos`);
 
-    const room = plural(hotel.offer.rooms, [`комната`, `комнаты`, `комнат`]);
-    const guest = plural(hotel.offer.guests, [`гостя`, `гостей`, `гостей`]);
+    const room = choiceOfEnding(hotel.offer.rooms, [`комната`, `комнаты`, `комнат`]);
+    const guest = choiceOfEnding(hotel.offer.guests, [`гостя`, `гостей`, `гостей`]);
 
     popupCard.querySelector(`.popup__text--capacity`).textContent = `${hotel.offer.rooms} ${room} для ${hotel.offer.guests} ${guest}`;
     popupCard.querySelector(`.popup__text--time`).textContent = `Заезд после ${hotel.offer.checkin}, выезд до ${hotel.offer.checkout}`;
@@ -29,12 +29,12 @@
       popupFeatures.removeChild(popupFeatures.firstChild);
     }
 
-    for (let i = 0; i < features.length; i++) {
+    features.forEach((elem) => {
       let item = document.createElement(`li`);
       item.classList.add(`popup__feature`);
-      item.classList.add(`popup__feature--${features[i]}`);
+      item.classList.add(`popup__feature--${elem}`);
       popupFeatures.appendChild(item);
-    }
+    });
 
     popupCard.querySelector(`.popup__description`).textContent = hotel.offer.description;
     // добавление фотографий в блок popupPhotos
@@ -43,11 +43,11 @@
 
     let insertedImg;
 
-    for (let j = 0; j < hotel.offer.photos.length; j++) {
+    hotel.offer.photos.forEach((elem) => {
       insertedImg = img.cloneNode(true);
-      insertedImg.src = hotel.offer.photos[j];
+      insertedImg.src = elem;
       popupPhotos.appendChild(insertedImg);
-    }
+    });
 
     popupCard.querySelector(`.popup__avatar`).src = hotel.author.avatar;
 
@@ -65,7 +65,7 @@
   };
 
   // функция выбора окончаний
-  const plural = (n, forms) => {
+  const choiceOfEnding = (n, forms) => {
     let id;
     if (n % 10 === 1 && n % 100 !== 11) {
       id = 0;
@@ -78,6 +78,6 @@
   };
 
   window.card = {
-    renderCard,
+    render,
   };
 })();
