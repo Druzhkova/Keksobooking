@@ -6,7 +6,7 @@
   const features = window.data.features;
 
   // функция рендеринга карточки
-  let renderCard = (hotel) => {
+  let render = (hotel) => {
     // шаблон модального окно с информацией об объявлении
     let userCardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
     // записываем шаблон в переменную
@@ -78,6 +78,6 @@
   };
 
   window.card = {
-    renderCard,
+    render,
   };
 })();

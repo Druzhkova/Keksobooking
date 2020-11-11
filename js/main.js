@@ -13,7 +13,7 @@
   let hotels = [];
 
   const onSuccess = (data) => {
-    window.filters.activateFilters(data);
+    window.filters.activate(data);
     hotels = data;
     activatePage();
   };

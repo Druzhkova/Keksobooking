@@ -87,7 +87,6 @@
       removeElement(prevCard);
     }
     window.util.deletePins();
-    address.value = `${locationMainPin.x} ${locationMainPin.y}`;
     mainPin.style.left = `${locationMainPin.x}px`;
     mainPin.style.top = `${locationMainPin.y}px`;
   };
@@ -105,6 +104,7 @@
   const resetForms = () => {
     const forms = document.querySelectorAll(`form`);
     forms.forEach((elem) => elem.reset());
+    address.value = `${locationMainPin.x} ${locationMainPin.y}`;
   };
 
   const onSuccess = () => {

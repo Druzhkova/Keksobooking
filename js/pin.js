@@ -10,7 +10,6 @@
   const map = document.querySelector(`.map`);
   const mainPin = document.querySelector(`.map__pin--main`);
   const address = document.querySelector(`#address`);
-  const renderCard = window.card.renderCard;
   const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`); // шаблон метки объявления
 
   const locationXY = {
@@ -108,7 +107,7 @@
         window.util.removeElement(prevCard);
       }
       // передаем данные, конкретного блока которые можно отрисовать
-      renderCard(hotel);
+      window.card.render(hotel);
     });
     return pin;
   };

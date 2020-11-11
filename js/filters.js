@@ -75,7 +75,7 @@
     lastTimeout = window.setTimeout(fn, DEBOUNCE_INTERVAL);
   };
 
-  const filtersChange = () => {
+  const filtersChangeHandler = () => {
     filterData = data.slice();
 
     filterHotelType();
@@ -92,15 +92,15 @@
     window.pin.insertPins(filterData);
   };
 
-  const activateFilters = function (adData) {
+  const activate = function (adData) {
     data = adData.slice();
     filter.addEventListener(`change`, () => {
-      debounce(filtersChange);
+      debounce(filtersChangeHandler);
     });
     return adData;
   };
 
   window.filters = {
-    activateFilters
+    activate,
   };
 })();
