@@ -36,9 +36,7 @@
   window.load(`https://21.javascript.pages.academy/keksobooking/data`, onSuccess, onError);
 
   const removeAttributeDisabled = () => {
-    for (let i = 0; i < disabledFormElements.length; i++) {
-      disabledFormElements[i].removeAttribute(`disabled`);
-    }
+    disabledFormElements.forEach((elem) => elem.removeAttribute(`disabled`));
   };
 
   const showElements = () => {

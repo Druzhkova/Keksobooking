@@ -29,12 +29,12 @@
       popupFeatures.removeChild(popupFeatures.firstChild);
     }
 
-    for (let i = 0; i < features.length; i++) {
+    features.forEach((elem) => {
       let item = document.createElement(`li`);
       item.classList.add(`popup__feature`);
-      item.classList.add(`popup__feature--${features[i]}`);
+      item.classList.add(`popup__feature--${elem}`);
       popupFeatures.appendChild(item);
-    }
+    });
 
     popupCard.querySelector(`.popup__description`).textContent = hotel.offer.description;
     // добавление фотографий в блок popupPhotos
@@ -43,11 +43,11 @@
 
     let insertedImg;
 
-    for (let j = 0; j < hotel.offer.photos.length; j++) {
+    hotel.offer.photos.forEach((elem) => {
       insertedImg = img.cloneNode(true);
-      insertedImg.src = hotel.offer.photos[j];
+      insertedImg.src = elem;
       popupPhotos.appendChild(insertedImg);
-    }
+    });
 
     popupCard.querySelector(`.popup__avatar`).src = hotel.author.avatar;
 

@@ -73,9 +73,7 @@
   });
 
   const addAttributeDisabled = () => {
-    for (let i = 0; i < disabledFormElements.length; i++) {
-      disabledFormElements[i].setAttribute(`disabled`, ``);
-    }
+    disabledFormElements.forEach((elem) => elem.setAttribute(`disabled`, ``));
   };
 
   const returnToInitialState = () => {
@@ -106,9 +104,7 @@
 
   const resetForms = () => {
     const forms = document.querySelectorAll(`form`);
-    for (let i = 0; i < forms.length; i++) {
-      forms[i].reset();
-    }
+    forms.forEach((elem) => elem.reset());
   };
 
   const onSuccess = () => {

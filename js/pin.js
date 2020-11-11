@@ -1,13 +1,6 @@
 'use strict';
 
 (function () {
-  const locationXY = {
-    MIN_X: MAIN_PIN_WIDTH / 2,
-    MAX_X: (map.clientWidth - MAIN_PIN_WIDTH),
-    MIN_Y: 130,
-    MAX_Y: 630
-  };
-
   const MAX_PINS = 5;
   const PIN_WIDTH = 40;
   const PIN_HEIGHT = 40;
@@ -20,10 +13,18 @@
   const renderCard = window.card.renderCard;
   const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`); // шаблон метки объявления
 
+  const locationXY = {
+    MIN_X: MAIN_PIN_WIDTH / 2,
+    MAX_X: (map.clientWidth - MAIN_PIN_WIDTH),
+    MIN_Y: 130,
+    MAX_Y: 630
+  };
+
   const locationMainPin = { // координаты main pin
     x: 570,
     y: 375
   };
+
 
   // внесения координат в форму
   const getAddress = () => {
