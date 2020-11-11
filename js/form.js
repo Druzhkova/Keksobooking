@@ -1,23 +1,23 @@
 'use strict';
 
 (function () {
-  // Заполнение поля адреса
-  const address = document.querySelector(`#address`);
+  const locationMainPin = { // координаты main pin
+    x: 570,
+    y: 375
+  };
+
   const adForm = document.querySelector(`.ad-form`);
   const mainPin = document.querySelector(`.map__pin--main`);
   const resetButton = document.querySelector(`.ad-form__reset`);
   const mapCards = document.querySelectorAll(`.map__card`);
   const map = document.querySelector(`.map`);
+  const address = document.querySelector(`#address`);
 
-  const mainPinX = window.main.mainPinX;
-  const mainPinY = window.main.mainPinY;
   const disabledFormElements = window.main.disabledFormElements;
   const popUpError = window.data.popUpError;
   const popUpSuccess = window.data.popUpSuccess;
   const removeElement = window.util.removeElement;
   const showPopUp = window.util.showPopUp;
-
-  address.value = `${mainPinX}, ${mainPinY}`;
 
   const onAdFormChange = () => {
     const roomNumber = document.querySelector(`#room_number`);
@@ -34,6 +34,17 @@
 
     const price = document.querySelector(`#price`);
     const type = document.querySelector(`#type`);
+
+    if (type.value === `bungalow`) {
+      price.placeholder = `0`;
+    } else if (type.value === `flat`) {
+      price.placeholder = `1000`;
+    } else if (type.value === `house`) {
+      price.placeholder = `5000`;
+    } else if (type.value === `palace`) {
+      price.placeholder = `10000`;
+    }
+
     // тип жилья -- цена
     price.setCustomValidity(``);
     if ((type.value === `bungalow`) && (+price.value < 0)) {
@@ -78,6 +89,9 @@
       removeElement(prevCard);
     }
     window.util.deletePins();
+    address.value = `${locationMainPin.x} ${locationMainPin.y}`;
+    mainPin.style.left = `${locationMainPin.x}px`;
+    mainPin.style.top = `${locationMainPin.y}px`;
   };
 
   resetButton.addEventListener(`click`, () => returnToInitialState());

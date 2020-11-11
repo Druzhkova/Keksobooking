@@ -3,6 +3,10 @@
 (function () {
   const ESC_KEY_CODE = 27;
   const ENTER_KEY_CODE = 13;
+  const XHR_STATUS_SUCCESSFUL_RESPONSES = 200;
+  const XHR_STATUS_CLIENT_ERROR = 400;
+  const XHR_STATUS_SERVER_ERROR = 500;
+  const XHR_TIMEOUT = 10000; // 10s
 
   const isEscEvent = (evt, action) => {
     if (evt.keyCode === ESC_KEY_CODE) {
@@ -34,11 +38,6 @@
   function processingRequests(url, onSuccess, onError, requestMethod, data) {
     const xhr = new XMLHttpRequest();
     xhr.responseType = `json`;
-
-    const XHR_STATUS_SUCCESSFUL_RESPONSES = 200;
-    const XHR_STATUS_CLIENT_ERROR = 400;
-    const XHR_STATUS_SERVER_ERROR = 500;
-    const XHR_TIMEOUT = 10000; // 10s
 
     xhr.addEventListener(`load`, () => {
       let error;

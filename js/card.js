@@ -19,8 +19,8 @@
     const popupFeatures = popupCard.querySelector(`.popup__features`);
     const popupPhotos = popupCard.querySelector(`.popup__photos`);
 
-    const room = plural(hotel.offer.rooms, [`комната`, `комнаты`, `комнат`]);
-    const guest = plural(hotel.offer.guests, [`гостя`, `гостей`, `гостей`]);
+    const room = choiceOfEnding(hotel.offer.rooms, [`комната`, `комнаты`, `комнат`]);
+    const guest = choiceOfEnding(hotel.offer.guests, [`гостя`, `гостей`, `гостей`]);
 
     popupCard.querySelector(`.popup__text--capacity`).textContent = `${hotel.offer.rooms} ${room} для ${hotel.offer.guests} ${guest}`;
     popupCard.querySelector(`.popup__text--time`).textContent = `Заезд после ${hotel.offer.checkin}, выезд до ${hotel.offer.checkout}`;
@@ -65,7 +65,7 @@
   };
 
   // функция выбора окончаний
-  const plural = (n, forms) => {
+  const choiceOfEnding = (n, forms) => {
     let id;
     if (n % 10 === 1 && n % 100 !== 11) {
       id = 0;
