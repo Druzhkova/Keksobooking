@@ -25,7 +25,7 @@
   };
 
   const getAddressCenterPin = () => {
-    address.value = `${locationMainPin.x + mainPin.offsetWidth / 2}, ${locationMainPin.y + mainPin.offsetHeight / 2}`;
+    address.value = `${Math.round(locationMainPin.x + mainPin.offsetWidth / 2)}, ${Math.round(locationMainPin.y + mainPin.offsetHeight / 2)}`;
   };
 
   getAddressCenterPin();
@@ -62,7 +62,7 @@
         locationMainPin.x = coordForFormX;
         locationMainPin.y = coordForFormY;
       }
-      address.value = `${locationMainPin.x}, ${locationMainPin.y}`;
+      address.value = `${Math.round(locationMainPin.x)}, ${Math.round(locationMainPin.y)}`;
     };
 
     const mouseUpHandler = (upEvt) => {
