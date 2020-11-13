@@ -4,7 +4,7 @@
   const MAX_PINS = 5;
   const PIN_WIDTH = 40;
   const PIN_HEIGHT = 40;
-  const MAIN_PIN_WIDTH = 65;
+  const MAIN_PIN_WIDTH = 64;
   const POINTER_HEIGHT = 22;
 
   const map = document.querySelector(`.map`);
@@ -13,8 +13,8 @@
   const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`); // шаблон метки объявления
 
   const locationXY = {
-    MIN_X: MAIN_PIN_WIDTH / 2,
-    MAX_X: (map.clientWidth - MAIN_PIN_WIDTH),
+    MIN_X: 0,
+    MAX_X: map.clientWidth,
     MIN_Y: 130,
     MAX_Y: 630
   };
@@ -24,13 +24,11 @@
     y: 375
   };
 
-
-  // внесения координат в форму
-  const getAddress = () => {
-    address.value = `${locationMainPin.x} ${locationMainPin.y}`;
+  const getAddressCenterPin = () => {
+    address.value = `${Math.round(locationMainPin.x + mainPin.offsetWidth / 2)}, ${Math.round(locationMainPin.y + mainPin.offsetHeight / 2)}`;
   };
 
-  getAddress();
+  getAddressCenterPin();
 
   const onPinMove = (evt) => {
     evt.preventDefault();
@@ -55,16 +53,16 @@
 
       const coordX = mainPin.offsetLeft - shift.x;
       const coordY = mainPin.offsetTop - shift.y;
-      const coordForFormX = coordX + PIN_WIDTH / 2;
-      const coordForFormY = coordY + PIN_HEIGHT / 2 + POINTER_HEIGHT;
+      const coordForFormX = coordX + MAIN_PIN_WIDTH / 2;
+      const coordForFormY = coordY + MAIN_PIN_WIDTH / 2 + POINTER_HEIGHT;
 
-      if (coordX >= (locationXY.MIN_X - PIN_WIDTH / 2) && coordX <= (locationXY.MAX_X - PIN_WIDTH / 2) && coordY >= (locationXY.MIN_Y - PIN_WIDTH / 2 - POINTER_HEIGHT) && coordY <= (locationXY.MAX_Y - PIN_WIDTH / 2 - POINTER_HEIGHT)) {
+      if (coordX >= (locationXY.MIN_X - MAIN_PIN_WIDTH / 2) && coordX <= (locationXY.MAX_X - MAIN_PIN_WIDTH / 2) && coordY >= (locationXY.MIN_Y - MAIN_PIN_WIDTH / 2 - POINTER_HEIGHT) && coordY <= (locationXY.MAX_Y - MAIN_PIN_WIDTH / 2 - POINTER_HEIGHT)) {
         mainPin.style.left = coordX + `px`;
         mainPin.style.top = coordY + `px`;
         locationMainPin.x = coordForFormX;
         locationMainPin.y = coordForFormY;
       }
-      getAddress();
+      address.value = `${Math.round(locationMainPin.x)}, ${Math.round(locationMainPin.y)}`;
     };
 
     const mouseUpHandler = (upEvt) => {
@@ -126,8 +124,7 @@
 
   window.pin = {
     renderPins,
-    insertPins,
-    getAddress
+    insertPins
   };
 
 })();

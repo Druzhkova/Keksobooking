@@ -1,9 +1,9 @@
 'use strict';
 
 (function () {
-  const locationMainPin = { // координаты main pin
+  const locationMainPin = {
     x: 570,
-    y: 375
+    y: 375,
   };
 
   const adForm = document.querySelector(`.ad-form`);
@@ -24,7 +24,7 @@
     const capacity = document.querySelector(`#capacity`);
     // количество комнат -- количество гостей
     roomNumber.setCustomValidity(``);
-    if ((roomNumber.value === `100`) && (capacity.value !== `0`)) {
+    if (roomNumber.value === `100` && capacity.value !== `0`) {
       roomNumber.setCustomValidity(`100 комнат не для гостей`);
     } else if (roomNumber.value < capacity.value) {
       roomNumber.setCustomValidity(`Количество мест не может превышать количество комнат`);
@@ -89,6 +89,7 @@
     window.util.deletePins();
     mainPin.style.left = `${locationMainPin.x}px`;
     mainPin.style.top = `${locationMainPin.y}px`;
+    address.value = `${Math.round(locationMainPin.x + mainPin.offsetWidth / 2)}, ${Math.round(locationMainPin.y + mainPin.offsetHeight / 2)}`;
   };
 
   resetButton.addEventListener(`click`, () => returnToInitialState());
@@ -104,7 +105,6 @@
   const resetForms = () => {
     const forms = document.querySelectorAll(`form`);
     forms.forEach((elem) => elem.reset());
-    address.value = `${locationMainPin.x} ${locationMainPin.y}`;
   };
 
   const onSuccess = () => {
@@ -131,5 +131,4 @@
     mainPin,
     mapCards,
   };
-
 })();
