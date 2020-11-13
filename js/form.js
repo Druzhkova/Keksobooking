@@ -89,7 +89,7 @@
     window.util.deletePins();
     mainPin.style.left = `${locationMainPin.x}px`;
     mainPin.style.top = `${locationMainPin.y}px`;
-    address.value = `${locationMainPin.x + mainPin.offsetWidth / 2}, ${locationMainPin.y + mainPin.offsetHeight / 2}`;
+    address.value = `${Math.round(locationMainPin.x + mainPin.offsetWidth / 2)}, ${Math.round(locationMainPin.y + mainPin.offsetHeight / 2)}`;
   };
 
   resetButton.addEventListener(`click`, () => returnToInitialState());
