@@ -11,7 +11,6 @@
   const resetButton = document.querySelector(`.ad-form__reset`);
   const mapCards = document.querySelectorAll(`.map__card`);
   const map = document.querySelector(`.map`);
-  const address = document.querySelector(`#address`);
 
   const disabledFormElements = window.main.disabledFormElements;
   const popUpError = window.data.popUpError;
@@ -104,7 +103,6 @@
   const resetForms = () => {
     const forms = document.querySelectorAll(`form`);
     forms.forEach((elem) => elem.reset());
-    address.value = `${locationMainPin.x} ${locationMainPin.y}`;
   };
 
   const onSuccess = () => {

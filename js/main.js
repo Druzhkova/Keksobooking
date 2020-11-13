@@ -8,7 +8,6 @@
   const insertPins = window.pin.insertPins;
   const popUpError = window.data.popUpError;
   const showPopUp = window.util.showPopUp;
-  const getAddress = window.pin.getAddress;
 
   let hotels = [];
 
@@ -44,7 +43,6 @@
     removeAttributeDisabled();
     adForm.classList.remove(`ad-form--disabled`);
     map.classList.remove(`map--faded`);
-    getAddress();
   };
 
   const activatePage = () => {
