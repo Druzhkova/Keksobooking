@@ -14,21 +14,21 @@
 
   const locationXY = {
     MIN_X: 0,
-    MAX_X: 1200,
+    MAX_X: map.clientWidth,
     MIN_Y: 130,
     MAX_Y: 630
   };
 
   const locationMainPin = { // координаты main pin
     x: 570,
-    y: 375 + PIN_HEIGHT / 2 + POINTER_HEIGHT
+    y: 375
   };
 
-
-  // внесения координат в форму
-  const getAddress = () => {
-    address.value = `${locationMainPin.x}, ${locationMainPin.y}`;
+  const getAddressCenterPin = () => {
+    address.value = `${locationMainPin.x + mainPin.offsetWidth / 2}, ${locationMainPin.y + mainPin.offsetHeight / 2}`;
   };
+
+  getAddressCenterPin();
 
   const onPinMove = (evt) => {
     evt.preventDefault();
@@ -62,7 +62,7 @@
         locationMainPin.x = coordForFormX;
         locationMainPin.y = coordForFormY;
       }
-      getAddress();
+      address.value = `${locationMainPin.x}, ${locationMainPin.y}`;
     };
 
     const mouseUpHandler = (upEvt) => {
@@ -124,8 +124,7 @@
 
   window.pin = {
     renderPins,
-    insertPins,
-    getAddress
+    insertPins
   };
 
 })();
