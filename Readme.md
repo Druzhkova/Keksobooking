@@ -4,4 +4,4 @@
 
 ---
 
-<a href="https://druzhkova.github.io/1516395-keksobooking-21/"><img src="./img/keksobooking.png" width="838"></a>
+<a href="https://druzhkova.github.io/1516395-keksobooking-21/"><img src="./img/keksobooking.png"></a>
